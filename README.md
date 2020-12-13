@@ -36,7 +36,5 @@ Command to run the program type
 
 ### Original authors:
 
-
-https://github.com/gremi-jr
-
-[<img src"https://avatars3.githubusercontent.com/u/35563440?s=460&u=c16b144e7fd91bf18515301bfcb82806b44a4da6&v=4" width="50" />](https://github.com/KalleHallden)
+- [Kalle Hallden](https://github.com/KalleHallden)
+- [gremi-jr](https://github.com/gremi-jr)
