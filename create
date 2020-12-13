@@ -1,0 +1,8 @@
+# your bash directory (if you do not know it: in the terminal >> which bash)
+#!/usr/bin/bash
+
+basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+
+"$basedir/create.bat" "$@"
+ret=$?
+exit $ret
