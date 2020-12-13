@@ -1,8 +1,8 @@
 ### setup:
 
 ```bash
-git clone "https://github.com/Smoqu/"
-cd projectInitializerAutomation
+git clone "https://github.com/Smoqu/InitialiseProjectsPython"
+cd InitialiseProjectsPython
 touch .env
 ```
 
@@ -20,7 +20,7 @@ DJANGO-REACT=django-react projects path (if any)
 pip install -r requirements.txt
 
 Add path to the create.bat to path enviroment variable:
-"path" folder directory to path
+"InitialiseProjectsPython" folder directory to path
 ```
 
 ### Usage:
