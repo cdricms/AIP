@@ -3,6 +3,6 @@
 
 basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 
-"$basedir/create.bat" "$@"
+"$basedir/aip.bat" "$@"
 ret=$?
 exit $ret

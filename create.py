@@ -2,23 +2,23 @@ import sys
 import os
 from github import Github
 from dotenv import load_dotenv, find_dotenv
+from settings import get_settings
 
 load_dotenv(find_dotenv())
 
 foldername = ""
 path_application = ""
-application = "-D"
+application = "default"
+
+settings = get_settings(application)
 
 if (len(sys.argv) > 1):
     foldername = str(sys.argv[1])
     if len(sys.argv) >= 3:
         application = str(sys.argv[2])
-        if application == "flutter":
-            path_application = os.getenv("FLUTTER")
-        elif application == "react":
-            path_application = os.getenv("REACT")
-        elif application == "django-react":
-            path_application = os.getenv("DJANGO-REACT")
+        settings = get_settings(application)
+        if application == settings["application"]:
+            path_application = settings["path"]
 
     do_push_on_gh = False
     if application != "react" and application != "django-react":
@@ -32,7 +32,7 @@ if (len(sys.argv) > 1):
             elif visibility.upper() == "PRIVATE":
                 is_private = True
 
-    path = os.getenv("FILEPATH")
+    path = settings["project_path"]
     token = os.getenv("TOKEN")
 
     if path_application == "":
@@ -43,22 +43,15 @@ if (len(sys.argv) > 1):
     def create():
         os.mkdir(_dir)
         os.chdir(_dir)
-        if (path_application != "-D"):
+        if (application != "default"):
             os.system(f'echo =========={application.upper()}========== ')
-            if application == "flutter":
-                os.system(f"flutter create .")
-            elif application == "react":
-                os.system(f"npx create-react-app .")
-            elif application == "django-react":
-                packages = ["Django", "django-cors-headers", "djangorestframework"]
-                os.chdir(_dir)
-                os.system("virtualenv env")
-                os.system("touch requirements.txt")
-                for package in packages:
-                    os.system(f"echo {package} >> requirements.txt")
+            if application == settings["application"]:
+                for command in settings["commands"]:
+                    os.system(command)
                 
-
-
+                if len(settings['packages']) > 0 and settings['package_origin'] == "requirements.txt":
+                    for package in settings['packages']:
+                        os.system(f"echo {package} >> requirements.txt")
 
         if do_push_on_gh:
             user = Github(token).get_user()
