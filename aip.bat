@@ -6,12 +6,14 @@ set app=%3
 cd /d %~dp0
 
 
-If "%1"=="" if "%1" == "/?" if "%1" == "help" (
-    CALL :write_Help
-)
+@REM If "%1"=="" if "%1" == "/?" if "%1" == "help" (
+@REM     CALL :write_Help
+@REM )
 
 if "%1"=="create" (
     python create.py %fn% %app%
+) else if "%1"=="remove" (
+    python remove.py %fn%
 ) else if "%1"=="settings" (
     echo.
     echo ^>^>^> Opening settings
@@ -25,20 +27,20 @@ if "%1"=="create" (
     python settings.py %command%
 ) else if "%1"=="pf" (
     python settings.py %command% %fn%
-)
+) 
 
 
 :: Doesn't work as expected
 
-:write_Help
-    echo.
-    echo Syntax: aip ^<command^>
-    echo.
-    echo Options: 
-    echo    ^<command^>     [^<settings^>, ^<create^>, ^<source^>]
-    echo.
-    echo    ^<create^>
-    echo        ^<name^>        Name of the project
-    echo        ^<application^> The kind of application (React, Flutter, Django, django-react...)
-    echo.
-EXIT /B 0
+@REM :write_Help
+@REM     echo.
+@REM     echo Syntax: aip ^<command^>
+@REM     echo.
+@REM     echo Options: 
+@REM     echo    ^<command^>     [^<settings^>, ^<create^>, ^<source^>]
+@REM     echo.
+@REM     echo    ^<create^>
+@REM     echo        ^<name^>        Name of the project
+@REM     echo        ^<application^> The kind of application (React, Flutter, Django, django-react...)
+@REM     echo.
+@REM EXIT /B 0
