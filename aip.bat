@@ -7,17 +7,7 @@ cd /d %~dp0
 
 
 If "%1"=="" if "%1" == "/?" if "%1" == "help" (
-    :write_Help
-    echo.
-    echo Syntax: aip ^<command^>
-    echo.
-    echo Options: 
-    echo    ^<command^>     [^<settings^>, ^<create^>, ^<source^>]
-    echo.
-    echo    ^<create^>
-    echo        ^<name^>        Name of the project
-    echo        ^<application^> The kind of application (React, Flutter, Django, django-react...)
-    echo.
+    CALL :write_Help
 )
 
 if "%1"=="create" (
@@ -38,7 +28,17 @@ if "%1"=="create" (
 )
 
 
+:: Doesn't work as expected
 
-
+:write_Help
+    echo.
+    echo Syntax: aip ^<command^>
+    echo.
+    echo Options: 
+    echo    ^<command^>     [^<settings^>, ^<create^>, ^<source^>]
+    echo.
+    echo    ^<create^>
+    echo        ^<name^>        Name of the project
+    echo        ^<application^> The kind of application (React, Flutter, Django, django-react...)
+    echo.
 EXIT /B 0
-
