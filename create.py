@@ -4,6 +4,12 @@ from github import Github
 from dotenv import load_dotenv, find_dotenv
 from settings import get_settings
 
+
+def _execute_commands(commands):
+    for command in commands:
+        os.system(command)
+
+
 load_dotenv(find_dotenv())
 
 foldername = ""
@@ -46,8 +52,7 @@ if (len(sys.argv) > 1):
         if (application != "default"):
             os.system(f'echo =========={application.upper()}========== ')
             if application == settings["application"]:
-                for command in settings["commands"]:
-                    os.system(command)
+                _execute_commands(settings["commands"])
                 
                 if len(settings['packages']) > 0 and settings['package_origin'] == "requirements.txt":
                     for package in settings['packages']:
@@ -64,8 +69,7 @@ if (len(sys.argv) > 1):
                 'git commit -m "Initial commit"',
                 'git push -u origin master']
             
-            for command in commands:
-                os.system(command)
+            _execute_commands(commands)
 
             os.system(f"echo {foldername} commited @ {f'https://github.com/{login}/{repo.name}'}")
 
