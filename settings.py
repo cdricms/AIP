@@ -1,12 +1,31 @@
 import json
 import os
-import subprocess
-
-def open_settings():
-    os.system(".\\settings.json")    
+import sys
 
 
+operating_sys = sys.platform
+command = str
+flag = str
+
+
+if operating_sys == 'win32':
+    _format_string = lambda string : "\\".join(string.split("/"))
+    _commands = {"ls": "dir"}
+else:
+    _format_string = lambda string : string
+    _commands = {"ls": "ls"}
+
+    
 settings_json = "settings.json"
+
+open_settings = lambda : os.system(f"{_format_string(settings_json)}")
+
+# print(sys.argv)
+
+if len(sys.argv) > 1:
+    command = str(sys.argv[1])
+    if len(sys.argv) > 2:
+        flag = str(sys.argv[2])
 
 
 def get_version():
@@ -15,11 +34,27 @@ def get_version():
         return settings["version"]
 
 
+if command == '-v':
+    print(get_version())
+
+
 def open_project_folder():
     with open(settings_json, 'r',) as read_file:
         settings = json.load(read_file)
-        project_path = "\\".join(settings["project_path"].split("/"))
-        os.system(f'explorer {project_path} ')
+        project_path = _format_string(settings["project_path"])
+        if flag == "-l":
+            os.system(f"{_commands['ls']} {project_path}")
+
+            print("""
+            If you would like to create a new project: aip create <foldername>
+            """)
+            
+        if command == "pf" and flag != "-l":
+            os.system(f'explorer {project_path} ')
+
+
+if (command == "pf"):
+    open_project_folder()
 
 
 def get_settings(application):
