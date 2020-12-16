@@ -72,7 +72,8 @@ try:
                 
                 _execute_commands(commands)
 
-                os.system(f"echo {foldername} commited @ {f'https://github.com/{login}/{repo.name}'}")
+                link = f"https://github.com/{login}/{repo.name}"
+                os.system(f"echo {foldername} commited @ {link}")
 
             print(f'{foldername} created locally @ {_dir} ')
             os.system('code .')

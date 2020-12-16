@@ -27,14 +27,16 @@ def handle_error(func, path_, exc_info):
         os.chmod(path_, stat.S_IWUSR)
         func(path_)
 
-if len(sys.argv) > 1:
-    print("/!\ Warning ! This is a harmful command! /!\\")
+def remove():
     try:
         token = os.getenv("TOKEN")
         user = Github(token).get_user()
-        login = user.login
+        # login = user.login
         folder_name = str(sys.argv[1])
         _dir = _format_string(f"{path}/{folder_name}")
+        repos = user.get_repos()
+        # for repo in repos:
+        #     print(repo.full_name, "is private: ", repo.private)
         try:
             ver = str(input(f"Are you sure you want to delete the folder {folder_name}? (Y/n)\n"))
             if ver.upper() == "Y" or ver.upper() == "YES":
@@ -57,3 +59,10 @@ if len(sys.argv) > 1:
     
     except KeyboardInterrupt:
         print("There are no guarantees that your project or your GitHub repository has not been deleted. Would be wise to check.")
+
+
+if len(sys.argv) > 1:
+    print("/!\ Warning ! This is a harmful command! /!\\")
+    remove()
+
+

@@ -27,7 +27,9 @@ if "%1"=="create" (
     python settings.py %command%
 ) else if "%1"=="pf" (
     python settings.py %command% %fn%
-) 
+) else if "%1"=="aip" (
+    start chrome https://github.com/Smoqu/AIP
+)
 
 
 :: Doesn't work as expected
