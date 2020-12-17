@@ -13,7 +13,7 @@ cd /d %~dp0
 if "%1"=="create" (
     python create.py %fn% %app%
 ) else if "%1"=="remove" (
-    python remove.py %fn%
+    python remove.py %fn% %app%
 ) else if "%1"=="settings" (
     echo.
     echo ^>^>^> Opening settings
@@ -26,9 +26,11 @@ if "%1"=="create" (
     echo Version:
     python settings.py %command%
 ) else if "%1"=="pf" (
-    python settings.py %command% %fn%
+    python settings.py %command% %fn% %3
 ) else if "%1"=="aip" (
-    start chrome https://github.com/Smoqu/AIP
+    start https://github.com/Smoqu/AIP
+) else if "%1"=="repos" (
+    python -c "from gh import repos_get; repos_get()"
 )
 
 

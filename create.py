@@ -1,16 +1,8 @@
 import sys
 import os
-from github import Github
-from dotenv import load_dotenv, find_dotenv
-from settings import get_settings
+from settings import get_settings, execute_commands
+from gh import repo_create
 
-
-def _execute_commands(commands):
-    for command in commands:
-        os.system(command)
-
-
-load_dotenv(find_dotenv())
 
 foldername = ""
 path_application = ""
@@ -40,7 +32,6 @@ try:
                     is_private = True
 
         path = settings["project_path"]
-        token = os.getenv("TOKEN")
 
         if path_application == "":
             _dir = f"{path}/{foldername}"
@@ -53,32 +44,17 @@ try:
             if (application != "default"):
                 os.system(f'echo =========={application.upper()}========== ')
                 if application == settings["application"]:
-                    _execute_commands(settings["commands"])
+                    execute_commands(settings["commands"])
                     
                     if len(settings['packages']) > 0 and settings['package_origin'] == "requirements.txt":
                         for package in settings['packages']:
                             os.system(f"echo {package} >> requirements.txt")
 
             if do_push_on_gh:
-                user = Github(token).get_user()
-                login = user.login
-                repo = user.create_repo(foldername, private=is_private)
-                commands = [f'echo # {repo.name} >> README.md',
-                    'git init',
-                    f'git remote add origin https://github.com/{login}/{foldername}.git',
-                    'git add .',
-                    'git commit -m "Initial commit"',
-                    'git push -u origin master']
+                repo_create(foldername, is_private)
                 
-                _execute_commands(commands)
-
-                link = f"https://github.com/{login}/{repo.name}"
-                os.system(f"echo {foldername} commited @ {link}")
-
             print(f'{foldername} created locally @ {_dir} ')
             os.system('code .')
-
-
 
         if __name__ == "__main__":
             create()
