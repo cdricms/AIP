@@ -28,6 +28,8 @@ if version.major == 3 and version.minor >= 7:
             "version": aip_version
         }
 
+        os.remove("README.md")
+
         urllib.request.urlretrieve(url, "aip.zip")
 
         with zipfile.ZipFile("./aip.zip", 'r') as zip_ref:
@@ -44,6 +46,7 @@ if version.major == 3 and version.minor >= 7:
                 folder_name = match.group(0)
                 break
 
+        print(folder_name)
 
         files = os.listdir(f"./{folder_name}")
         for file in files:
@@ -60,11 +63,11 @@ if version.major == 3 and version.minor >= 7:
             settings = json.dumps(settings_template, indent=2)
             write_file.write(settings)
 
-        os.system("pip install -r requirements.txt -U")
+        # os.system("pip install -r requirements.txt -U")
 
         input(f"Add {os.getcwd()} in your Environment Varibales > PATH")
 
-    except:
+    except: 
         print("Unable to install please try again later, or do it manually from github")
 
 else:
