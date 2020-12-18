@@ -64,7 +64,7 @@ if version.major == 3 and version.minor >= 7:
             settings = json.dumps(settings_template, indent=2)
             write_file.write(settings)
 
-        # os.system("pip install -r requirements.txt -U")
+        os.system("pip install -r requirements.txt -U")
 
         input(f"Add {os.getcwd()} in your Environment Varibales > PATH")
 
