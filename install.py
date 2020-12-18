@@ -25,7 +25,8 @@ if version.major == 3 and version.minor >= 7:
                     "packages": ["ex: 'uuid'", "ex: 'whatever'"]
                 }
             ],
-            "version": aip_version
+            "version": aip_version,
+            "gh_unauthorized": []
         }
 
         os.remove("README.md")
