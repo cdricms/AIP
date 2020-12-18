@@ -33,6 +33,8 @@ if "%1"=="create" (
     python -c "from gh import repos_get; repos_get()"
 ) else if "%1"=="gh" (
     python -c "from settings import get_full_settings; print(get_full_settings()[2])"
+) else if "%1"=="upgrade" (
+    python upgrade.py %1
 )
 
 
