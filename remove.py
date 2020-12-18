@@ -2,17 +2,17 @@ from gh import repo_delete
 import os
 import sys
 
-from settings import get_settings, _format_string
+from settings import get_full_settings, get_app_settings, _format_string
 from shutil import rmtree
 import stat
 
 
-def handle_error(func, path_, exc_info):  
+def handle_error(func, path_, exc_info):
     if not os.access(path_, os.W_OK):
         os.chmod(path_, stat.S_IWUSR)
         func(path_)
 
-    elif exc_info[0].__name__ != "PermissionError":
+    if exc_info[0].__name__ != "PermissionError":
         print(f"Your project folder @ {path_} has been successfully deleted")
     else:
         print(exc_info[1])
@@ -25,14 +25,13 @@ def remove():
 
         application = "default"
 
-        settings = (get_settings(application))
-        path = settings['project_path']
+        settings = (get_app_settings(application))
+        path = get_full_settings()[0]
         path_application = str
 
         if len(sys.argv) > 2:
             application = str(sys.argv[2])
-            settings = (get_settings(application))
-            path = settings['project_path']
+            settings = (get_app_settings(application))
             path_application = settings['path']
 
         if application == "default":

@@ -31,6 +31,8 @@ if "%1"=="create" (
     start https://github.com/Smoqu/AIP
 ) else if "%1"=="repos" (
     python -c "from gh import repos_get; repos_get()"
+) else if "%1"=="gh" (
+    python -c "from settings import get_full_settings; print(get_full_settings()[2])"
 )
 
 

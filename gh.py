@@ -30,14 +30,14 @@ def repo_create(foldername, private):
 def repo_delete(foldername):
     try:
         repo = user.get_repo(foldername)
-        verification_string = f"Are you sure you want to delete this repository ({repo.full_name})? (Y/n)\n"
+        verification_string = f"[GITHUB]:\nAre you sure you want to delete this repository ({repo.full_name})? (Y/n)\n"
         verification = str(input(verification_string))
         if verification.upper() == "Y" or verification.upper() == "YES":
             repo.delete()
-            print("Your repository has been successfully deleted.")
+            print("[GITHUB]: Your repository has been successfully deleted.")
         
     except github.GithubException:
-        print("Your repository has not been found")
+        print("[GITHUB]: Your repository has not been found")
 
 
 def repos_get():
