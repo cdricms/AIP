@@ -1,12 +1,8 @@
 ## Only available on Windows (for now), works on bash.
 
 ### setup:
-
-```bash
-git clone "https://github.com/Smoqu/AIP"
-cd AIP
-touch .env
-```
+Download the files from the install branch, and simply execute the install.py file.
+Or install it manually
 
 #### .env
 
