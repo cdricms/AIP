@@ -10,10 +10,10 @@ flag_or_application = "default"
 
 if operating_sys == 'win32':
     _format_string = lambda string : "\\".join(string.split("/"))
-    _commands = {"ls": "dir"}
+    _commands = {"ls": "dir", "explorer": "explorer"}
 else:
     _format_string = lambda string : string
-    _commands = {"ls": "ls"}
+    _commands = {"ls": "ls", "explorer": "xdg-open"}
 
     
 settings_json = "settings.json"
@@ -98,7 +98,7 @@ def open_project_folder():
         """)
             
     if command == "pf" and flag_or_application != "-l" and len(sys.argv) < 4:
-        os.system(f'explorer {_dir} ')
+        os.system(f'{_commands["explorer"]} {_dir} ')
 
 
 if (command == "pf"):
