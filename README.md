@@ -19,7 +19,7 @@ Add path to the folder in enviroment variables:
 
 ### Usage:
 
-[Wiki](https://github.com/Smoqu/AIP/wiki/Commmands)
+[Wiki](https://github.com/Smoqu/AIP/wiki/Commands)
 
 
 ### Original authors:
