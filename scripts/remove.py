@@ -1,10 +1,10 @@
-from gh import repo_delete
 import os
 import sys
-
-from settings import get_full_settings, get_app_settings, _format_string
 from shutil import rmtree
 import stat
+
+from gh import repo_delete
+from settings import get_full_settings, get_app_settings, _format_string
 
 
 def handle_error(func, path_, exc_info):
