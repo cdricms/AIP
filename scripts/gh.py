@@ -4,7 +4,7 @@ import os
 import sys
 import github
 
-from settings import execute_commands
+from . import settings
 
 
 load_dotenv(find_dotenv())
@@ -21,7 +21,7 @@ def repo_create(foldername, private):
         'git commit -m "Initial commit"',
         'git push -u origin master']
                 
-    execute_commands(commands)
+    settings.execute_commands(commands)
 
     link = f"https://github.com/{login}/{repo.name}"
     os.system(f"echo {foldername} commited @ {link}")
