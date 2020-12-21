@@ -11,7 +11,6 @@ os_platform = sys.platform
 version = sys.version_info
 
 if version.major == 3 and version.minor >= 7:
-    try:
         response = requests.get("https://api.github.com/repos/Smoqu/AIP/releases/latest")
         url = response.json()["zipball_url"]
         aip_version = response.json()["tag_name"]
@@ -31,8 +30,14 @@ if version.major == 3 and version.minor >= 7:
             "gh_unauthorized": [],
             "editor": "Your favourite editor"
         }
+        
+        gitignore = ".gitignore"
 
-        os.remove("README.md")
+        if os.path.exists("README.md"):
+            os.remove("README.md")
+		
+        if os.path.exists(gitignore):
+            os.remove(gitignore)
 
         urllib.request.urlretrieve(url, "aip.zip")
 
@@ -54,11 +59,15 @@ if version.major == 3 and version.minor >= 7:
 
         files = os.listdir(f"./{folder_name}")
         for file in files:
-            shutil.move(f"./{folder_name}/{file}", "./")
+            if file != "scripts":
+                shutil.move(f"./{folder_name}/{file}", "./")
+        
+        shutil.move(f"./{folder_name}/scripts", "./")
+
 
         os.rmdir(folder_name)
         os.remove("aip.zip")
-        os.remove(".gitignore")
+        os.remove(gitignore)
 
         if os_platform == "win32":
             os.remove("aip-linux")
@@ -80,11 +89,16 @@ if version.major == 3 and version.minor >= 7:
             input(f"Add {os.getcwd()} in your Environment Varibales > PATH")
         elif os_platform == "linux":
             os.system("chmod +x aip")
-            shutil.move("aip", "/usr/bin")
+
+            if os.path.exists("/usr/bin/aip"):
+                print("aip already exists in /usr/bin; We need to remove it.")
+                os.system("sudo rm /usr/bin/aip")
+                
+            print("Move aip file inside /usr/bin, for this we need authorization, if you wish you can do it manualy => Ctrl C")
+            os.system("sudo mv ./aip /usr/bin")
 
 
-    except: 
-        print("Unable to install please try again later, or do it manually from github")
 
 else:
     print("Python version less than 3.7.x or not supported, you can create a virtual environment to fix this issue or use te correct version.")
+    
