@@ -3,6 +3,10 @@
 basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 cd $basedir/AIP # It can be changed to $basedir/.../AIP but always keep /AIP at the end
 
+#or
+
+cd .../AIP
+
 if [ $1 = "create" ]; then
     python3 scripts/create.py $2 $3
 elif [ $1 = "remove" ]; then
