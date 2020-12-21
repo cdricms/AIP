@@ -7,9 +7,9 @@ cd /d %~dp0
 
 
 if "%1"=="create" (
-    python scripts/create.py %fn% %app%
+    py scripts/create.py %fn% %app%
 ) else if "%1"=="remove" (
-    python scripts/remove.py %fn% %app%
+    py scripts/remove.py %fn% %app%
 ) else if "%1"=="settings" (
     echo.
     echo ^>^>^> Opening settings
@@ -20,17 +20,17 @@ if "%1"=="create" (
     code .\ @REM can be changed to whatever editor you are using.
 ) else if "%1"=="-v" (
     echo Version:
-    python scripts/settings.py %command%
+    py scripts/settings.py %command%
 ) else if "%1"=="pf" (
-    python scripts/settings.py %command% %fn% %3
+    py scripts/settings.py %command% %fn% %3
 ) else if "%1"=="aip" (
     start https://github.com/Smoqu/AIP
 ) else if "%1"=="repos" (
-    python -c "from scripts.gh import repos_get; repos_get()"
+    py -c "from scripts.gh import repos_get; repos_get()"
 ) else if "%1"=="gh" (
-    python -c "from scripts.settings import get_full_settings; print(get_full_settings()[2])"
+    py -c "from scripts.settings import get_full_settings; print(get_full_settings()[2])"
 ) else if "%1"=="upgrade" (
-    python scripts/upgrade.py %1
+    py scripts/upgrade.py %1
 ) else (
     echo.
     echo Syntax:

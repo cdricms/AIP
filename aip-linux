@@ -4,9 +4,9 @@ basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 cd $basedir/AIP # It can be changed to $basedir/.../AIP but always keep /AIP at the end
 
 if [ $1 = "create" ]; then
-    python3 create.py $2 $3
+    python3 scripts/create.py $2 $3
 elif [ $1 = "remove" ]; then
-    python3 remove.py $2 $3
+    python3 scripts/remove.py $2 $3
 elif [ $1 = "settings" ]; then
     echo
     echo ">>> Opening settings"
@@ -17,17 +17,17 @@ elif [ $1 = "source" ]; then
     code .
 elif [ $1 = "-v" ]; then
     echo "Version:" 
-    python3 settings.py $1
+    python3 scripts/settings.py $1
 elif [ $1 = "pf" ]; then
-    python3 settings.py $1 $2 $3
+    python3 scripts/settings.py $1 $2 $3
 elif [ $1 = "aip" ]; then
     xdg-open https://github.com/Smoqu/AIP
 elif [ $1 = "repos" ]; then
-    python3 -c "from gh import repos_get; repos_get()"
+    python3 -c "from scripts.gh import repos_get; repos_get()"
 elif [ $1 = "gh" ]; then
-    python3 -c "from settings import get_full_settings; print(get_full_settings()[2])"
+    python3 -c "from scripts.settings import get_full_settings; print(get_full_settings()[2])"
 elif [ $1 = "upgrade" ]; then
-    python3 upgrade.py $1
+    python3 scripts/upgrade.py $1
 else
     echo
     echo 'Syntax:'
