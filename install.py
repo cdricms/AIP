@@ -7,7 +7,9 @@ import shutil
 import sys
 import json
 
+os_platform = sys.platform
 version = sys.version_info
+
 if version.major == 3 and version.minor >= 7:
     try:
         response = requests.get("https://api.github.com/repos/Smoqu/AIP/releases/latest")
@@ -26,7 +28,8 @@ if version.major == 3 and version.minor >= 7:
                 }
             ],
             "version": aip_version,
-            "gh_unauthorized": []
+            "gh_unauthorized": [],
+            "editor": "Your favourite editor"
         }
 
         os.remove("README.md")
@@ -57,6 +60,13 @@ if version.major == 3 and version.minor >= 7:
         os.remove("aip.zip")
         os.remove(".gitignore")
 
+        if os_platform == "win32":
+            os.remove("aip-linux")
+        else:
+            os.remove("aip")
+            os.remove("aip.bat")
+            os.rename("aip-linux", "aip")
+
         os.system("touch .env")
         os.system("echo TOKEN=GitHub token (must have repo and delete_repo enabled) >> .env")
 
@@ -66,7 +76,12 @@ if version.major == 3 and version.minor >= 7:
 
         os.system("pip install -r requirements.txt -U")
 
-        input(f"Add {os.getcwd()} in your Environment Varibales > PATH")
+        if os_platform == "win32":
+            input(f"Add {os.getcwd()} in your Environment Varibales > PATH")
+        elif os_platform == "linux":
+            os.system("chmod +x aip")
+            shutil.move("aip", "/usr/bin")
+
 
     except: 
         print("Unable to install please try again later, or do it manually from github")
