@@ -7,6 +7,7 @@ import shutil
 import sys
 import json
 
+settings_json = "settings.json"
 
 def upgrade():
     version = sys.version_info
@@ -19,10 +20,9 @@ def upgrade():
             urllib.request.urlretrieve(url, "aip.zip")
 
             with zipfile.ZipFile("./aip.zip", 'r') as zip_ref:
-                # aip_folder = zip_ref.namelist()[0]
                 zip_ref.extractall("./")
 
-            DO_NOT_REMOVE = ["settings.json", ".env"]
+            DO_NOT_REMOVE = [settings_json, ".env"]
             dirs = os.listdir("./")
             for dir in dirs:
                 if dir not in DO_NOT_REMOVE:
@@ -54,7 +54,7 @@ def upgrade():
 
             settings["version"] = aip_version
 
-            with open("settings.json", "w") as write_file:
+            with open(settings_json, "w") as write_file:
                 json.dump(settings, write_file, indent=2)
 
         except:
@@ -67,7 +67,7 @@ def upgrade():
 def check_version():
     response = requests.get("https://api.github.com/repos/Smoqu/AIP/releases/latest")
     aip_version = response.json()["tag_name"]
-    with open("settings.json", "r") as read_file:
+    with open(settings_json, "r") as read_file:
         settings = json.load(read_file)
 
         if settings["version"] != aip_version:
@@ -82,6 +82,5 @@ def check_version():
 
 
 
-if len(sys.argv) > 1:
-    if str(sys.argv[1]) == "upgrade":
-        check_version()
+if len(sys.argv) > 1 and str(sys.argv[1]) == "upgrade":
+    check_version()

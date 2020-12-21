@@ -22,21 +22,40 @@ Add path to the folder in enviroment variables:
 ```
 
 ### Usage:
+
 #### Changes too much
 
 ```bash
 Command to run the program type
 
 
+Syntax:
 'aip <command>'
 '<command>'
-  - create <foldername> (<application>) => creates a project, and can push on GitHub
-  - remove <foldername> (<application>) => deletes a project, (and can delete on GitHub, not yet available)
-  - -v => returns the version of the cli
-  - pf => opens the main projects folder
-    - -l => returns all the directories of the projects folder in the terminal.
-  - source => opens the source code in VSCode
-  - settings => opens the settings.json file
+     Commands:
+        '<create> <foldername> (<application>)'
+            '=> creates a folder inside the projects directory; once done opens it directly on your editor. (can also push on GitHub)'
+        '<remove> <foldername> (<application>)'
+            '=> removes a folder inside the projects directory; can also remove on GitHub.'
+        '<settings>'
+            'opens the settings in your editor'
+        '<source>'
+            'opens the source code in your editor'
+        '<-v>'
+            'the version of aip'
+        '<pf>'
+            'opens the main project folder'
+            '<-l>'
+                'lists all your projects directories inside the main folder'
+            '<application> (<-l>)'
+                "opens the application's folder"
+            '<aip>'
+                'opens the AIP GitHub repository'
+            '<repos>'
+                'lists all your repositories'
+            '<gh>'
+                'lists all the applications unauthorized to push on GitHub'
+            '<upgrade>'
 ```
 
 ### Original authors:
