@@ -12,11 +12,6 @@ def handle_error(func, path_, exc_info):
         os.chmod(path_, stat.S_IWUSR)
         func(path_)
 
-    if exc_info[0].__name__ != "PermissionError":
-        print(f"Your project folder @ {path_} has been successfully deleted")
-    else:
-        print(exc_info[1])
-
 
 def remove():
     try:
@@ -45,6 +40,8 @@ def remove():
             ver = str(input(f"Are you sure you want to delete the folder {foldername}? (Y/n)\n"))
             if ver.upper() == "Y" or ver.upper() == "YES":
                 rmtree(_dir, onerror=handle_error)
+                if not os.path.exists(_dir):
+                    print("Your project has been successfully deleted from your computer.")
 
         except FileNotFoundError:
             print("The folder has not been found in your projects folder.")
