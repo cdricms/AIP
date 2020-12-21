@@ -1,4 +1,4 @@
-## Only available on Windows (for now), works on bash.
+## Only available on Windows (works on bash) and Linux (tried on Ubuntu). Maybe on MacOS.
 
 ### setup:
 Download the files from the install branch, and simply execute the install.py file.
