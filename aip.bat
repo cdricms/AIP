@@ -17,7 +17,8 @@ if "%1"=="create" (
 ) else if "%1"=="source" (
     echo.
     echo ^>^>^> Opening source code in VSCode
-    code .\ @REM can be changed to whatever editor you are using.
+    REM can be changed to whatever editor you are using.
+    code .\ 
 ) else if "%1"=="-v" (
     echo Version:
     py scripts/settings.py %command%
