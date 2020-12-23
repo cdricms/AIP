@@ -15,21 +15,9 @@ if version.major == 3 and version.minor >= 7:
         url = response.json()["zipball_url"]
         aip_version = response.json()["tag_name"]
 
-        settings_template = {
-            "project_path": "The path of your main projects directory, ex: 'D:/.../'",
-            "applications": [
-                {
-                    "application": "name of the application (like react or flutter...)",
-                    "commands": ["ex: 'yarn create react-app .'", ""],
-                    "path": "path of the application folder, like: 'React' (will be found in 'project_path/path')",
-                    "package_origin": "ex: 'package.json'",
-                    "packages": ["ex: 'uuid'", "ex: 'whatever'"]
-                }
-            ],
-            "version": aip_version,
-            "gh_unauthorized": [],
-            "editor": "Your favourite editor"
-        }
+        settings_res = requests.get("https://gist.githubusercontent.com/Smoqu/704d343e972375a215eb92b04ca75a5f/raw/50cc4ffd7e984bccf379e5f0fa5f1eb008704b34/settings_template.json")
+        settings_data = settings_res.json()
+        settings_data["version"] = aip_version
         
         gitignore = ".gitignore"
 
@@ -80,7 +68,7 @@ if version.major == 3 and version.minor >= 7:
         os.system("echo TOKEN=GitHub token (must have repo and delete_repo enabled) >> .env")
 
         with open("settings.json", "w") as write_file:
-            settings = json.dumps(settings_template, indent=2)
+            settings = json.dumps(settings_data, indent=2)
             write_file.write(settings)
 
         os.system("pip install -r requirements.txt -U")
