@@ -46,7 +46,7 @@ try:
             editor = get_full_settings()[3]
             os.chdir(_dir)
             if (application != "default"):
-                os.system(f'echo =========={application.upper()}========== ')
+                print(f'=========={application.upper()}========== ')
                 if application == settings["application"]:                    
                     if len(settings['packages']) > 0 and settings['package_origin'] == "requirements.txt":
                         for package in settings['packages']:
