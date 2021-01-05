@@ -4,7 +4,7 @@ from shutil import rmtree
 import stat
 
 from gh import repo_delete
-from settings import get_full_settings, get_app_settings, _format_string
+from settings import get_full_settings, get_app_settings, format_string
 
 
 def handle_error(func, path_, exc_info):
@@ -30,9 +30,9 @@ def remove():
             path_application = settings['path']
 
         if application == "default":
-            _dir = _format_string(f"{path}/{foldername}")
+            _dir = format_string(f"{path}/{foldername}")
         else:
-            _dir = _format_string(f"{path}/{path_application}/{foldername}")
+            _dir = format_string(f"{path}/{path_application}/{foldername}")
 
         print(_dir)
 

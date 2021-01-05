@@ -10,6 +10,8 @@ if "%1"=="create" (
     py scripts/create.py %fn% %app%
 ) else if "%1"=="remove" (
     py scripts/remove.py %fn% %app%
+) else if "%1"=="open" (
+    py scripts/open.py %fn% %app%
 ) else if "%1"=="settings" (
     echo.
     echo ^>^>^> Opening settings
