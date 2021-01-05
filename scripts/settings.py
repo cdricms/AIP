@@ -9,16 +9,16 @@ flag_or_application = "default"
 
 
 if operating_sys == 'win32':
-    _format_string = lambda string : "\\".join(string.split("/"))
-    _commands = {"ls": "dir", "explorer": "explorer"}
+    format_string = lambda string : "\\".join(string.split("/"))
+    commands = {"ls": "dir", "explorer": "explorer"}
 else:
-    _format_string = lambda string : string
-    _commands = {"ls": "ls", "explorer": "xdg-open"}
+    format_string = lambda string : string
+    commands = {"ls": "ls", "explorer": "xdg-open"}
 
     
 settings_json = "settings.json"
 
-open_settings = lambda : os.system(f"{_format_string(settings_json)}")
+open_settings = lambda : os.system(f"{format_string(settings_json)}")
 
 def get_full_settings():
     with open(settings_json, 'r') as read_file:
@@ -82,24 +82,24 @@ def open_project_folder():
 
 
     if flag_or_application == "default":
-        _dir = _format_string(path)
+        _dir = format_string(path)
     elif flag_or_application != "default" and flag_or_application != "-l":
         path_application = app_settings["path"]
-        _dir = _format_string(f"{path}/{path_application}")
+        _dir = format_string(f"{path}/{path_application}")
         if len(sys.argv) >= 4 and sys.argv[3] == "-l":
-            os.system(f"{_commands['ls']} {_format_string(_dir)}")
+            os.system(f"{commands['ls']} {format_string(_dir)}")
 
 
 
     if flag_or_application == "-l":
-        os.system(f"{_commands['ls']} {_format_string(path)}")
+        os.system(f"{commands['ls']} {format_string(path)}")
 
         print("""
         If you would like to create a new project: aip create <foldername>
         """)
             
     if command == "pf" and flag_or_application != "-l" and len(sys.argv) < 4:
-        os.system(f'{_commands["explorer"]} {_dir} ')
+        os.system(f'{commands["explorer"]} {_dir} ')
 
 
 if (command == "pf"):

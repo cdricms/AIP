@@ -11,6 +11,8 @@ if [ $1 = "create" ]; then
     python3 scripts/create.py $2 $3
 elif [ $1 = "remove" ]; then
     python3 scripts/remove.py $2 $3
+elif [ $1 = "open" ]; then
+    python3 scripts/open.py $2 $3
 elif [ $1 = "settings" ]; then
     echo
     echo ">>> Opening settings"
