@@ -20,7 +20,10 @@ settings_json = "settings.json"
 
 open_settings = lambda : os.system(f"{format_string(settings_json)}")
 
-def get_full_settings():
+def get_full_settings() -> tuple:
+    """
+    Gets the important settings
+    """
     with open(settings_json, 'r') as read_file:
         settings = json.load(read_file)
         project_path = settings['project_path']
@@ -45,6 +48,11 @@ if command == '-v':
 
 
 def get_app_settings(application):
+    """
+    Gets the settings from a certain application, if the application doesn't exist in settings.json, return an empty string
+
+    :param application : application from applications: []
+    """
     with open(settings_json, 'r') as read_file:
         settings = json.load(read_file)
         try:
@@ -72,7 +80,10 @@ def get_app_settings(application):
             return ""
 
 
-def open_project_folder():
+def open_project_folder() -> None:
+    """
+    Opens the project folder in the explorer 
+    """
     _dir = ""
     app_settings = str
     path = get_full_settings()[0]
@@ -107,6 +118,9 @@ if (command == "pf"):
 
 
 def execute_commands(commands):
+    """
+    Executes the commands from a tuple of list in the terminal
+    """
     for command in commands:
         os.system(command)
 
