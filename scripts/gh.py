@@ -6,7 +6,7 @@ import github
 import json
 import requests
 
-from settings import execute_commands
+from settings import execute_commands, settings_json
 
 
 load_dotenv(find_dotenv())
@@ -14,6 +14,8 @@ token, gist_id = os.getenv("TOKEN"), os.getenv("GIST")
 gh = Github(token)
 user = gh.get_user()
 login = user.login
+
+
 
 
 def repo_create(foldername: str, private: bool) -> None:
@@ -68,15 +70,48 @@ def backup() -> None:
     """
     Backs up the settings.json file to a personal gist
     """
-    if gist_id != None:
+
+    def create_gist_fun():
+        create_gist = input("Would you like to create a secret gist for your settings.json ? (Y/n)\n")
+
+        if create_gist == "" or create_gist.upper() == "Y" or create_gist.upper() == "YES":
+            if os.path.exists(settings_json):
+                with open(settings_json, "r") as read_file:
+                    settings = json.load(read_file)
+                    settings = json.dumps(settings, indent=2)
+
+                user.create_gist(public=False, files={settings_json: github.InputFileContent(content=str(settings))})
+                print("Get your Gist ID of the settings.json file and insert it inside the .env file")
+                os.system("echo 'GIST=Gist ID' >> .env")
+            else:
+                res = requests.get(f"https://api.github.com/gists/704d343e972375a215eb92b04ca75a5f")
+                raw = res.json()["files"]["settings_template.json"]["raw_url"]
+                text = requests.get(raw).text
+                d = json.loads(text)
+
+                with open(settings_json, "w") as write_file:
+                    dump = json.dumps(d, indent=2)
+                    write_file.write(dump)
+
+                print("A settings.json file has been created")
+
+                create_gist_fun()
+        else:
+            quit()
+
+
+    if gist_id != None and os.path.exists(settings_json):
         gist = gh.get_gist(gist_id)
-        with open("settings.json", "r") as read_file:
+        with open(settings_json, "r") as read_file:
             settings = json.load(read_file)
             settings = json.dumps(settings, indent=2)
 
-        gist.edit(files={'settings.json': github.InputFileContent(content=str(settings))})
+        gist.edit(files={settings_json: github.InputFileContent(content=str(settings))})
     else:
         print("Please input a 'GIST' parameter inside your .env\n Like so: GIST=gist id")
+
+        create_gist_fun()
+
         
 
 def get_json_settings() -> dict:
@@ -85,7 +120,7 @@ def get_json_settings() -> dict:
     """
     if gist_id != None:
         res = requests.get(f"https://api.github.com/gists/{gist_id}")
-        raw = res.json()["files"]["settings.json"]["raw_url"]
+        raw = res.json()["files"][settings_json]["raw_url"]
         text = requests.get(raw).text
         data = text.replace("'", "\"")
         d = json.loads(data)

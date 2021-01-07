@@ -117,9 +117,9 @@ if (command == "pf"):
     open_project_folder()
 
 
-def execute_commands(commands):
+def execute_commands(commands) -> None:
     """
-    Executes the commands from a tuple of list in the terminal
+    Executes the commands from a tuple or list in the terminal
     """
     for command in commands:
         os.system(command)
