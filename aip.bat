@@ -34,6 +34,10 @@ if "%1"=="create" (
     py -c "from scripts.settings import get_full_settings; print(get_full_settings()[2])"
 ) else if "%1"=="upgrade" (
     py scripts/upgrade.py %1
+) else if "%1"=="bu" (
+    py scripts/backup.py
+) else if "%1"=="get-settings" (
+    py scripts/get_settings_json.py
 ) else (
     echo.
     echo Syntax:

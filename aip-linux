@@ -34,6 +34,10 @@ elif [ $1 = "gh" ]; then
     python3 -c "from scripts.settings import get_full_settings; print(get_full_settings()[2])"
 elif [ $1 = "upgrade" ]; then
     python3 scripts/upgrade.py $1
+elif [ $1 = "bu" ]; then
+    python3 scripts/backup.py
+elif [ $1 = "get-settings"]; then
+    python3 scripts/get_settings_json.py
 else
     echo
     echo 'Syntax:'
