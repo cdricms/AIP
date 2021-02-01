@@ -1,0 +1,16 @@
+commands:
+	create
+	remove
+	open
+	pf
+		-l
+	repos
+	settings
+	source
+	gh
+	aip
+	upgrade
+	
+	get-settings
+	bu
+	--version ou -v
