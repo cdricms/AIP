@@ -1,2 +1,2 @@
 def create(filename: str, application: str):
-  pass
+  print(filename, application)

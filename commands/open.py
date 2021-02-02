@@ -1,2 +1,2 @@
-def open(filename: str, application: str):
-  pass
+def open_project(filename: str, application: str):
+  print(filename, application)
