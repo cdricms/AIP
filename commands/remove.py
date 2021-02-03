@@ -1,3 +1,2 @@
-def remove(filename: str, application: str):
-  print(filename, application)
-  
+def remove(foldername: str, application: str):
+    print(foldername, application)

@@ -1,2 +1,2 @@
-def open_project(filename: str, application: str):
-  print(filename, application)
+def open_project(foldername: str, application: str):
+    print(foldername, application)
