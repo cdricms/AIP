@@ -43,13 +43,21 @@ def get_full_settings() -> tuple:
     """
     Gets the important settings
     """
+    project_path = str
+    version = str
+    gh_unauthorized = list
+    editor = str
     with open(settings_json, 'r') as read_file:
         settings = json.load(read_file)
         project_path = settings['project_path']
-        version = settings["version"]
         gh_unauthorized = settings["gh_unauthorized"]
         editor = settings["editor"]
-        return (project_path, version, gh_unauthorized, editor)
+
+    with open('aipconfig.json', 'r') as read_file:
+        config = json.load(read_file)
+        version = config["version"]
+
+    return (project_path, version, gh_unauthorized, editor)
 
 
 def get_app_settings(application):

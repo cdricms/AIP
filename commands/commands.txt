@@ -1,16 +1,16 @@
 commands:
 	create DONE
-	remove
-	open
+	remove DONE
+	open DONE
 	pf
 		-l DONE
-	repos
+	repos DONE
 	settings DONE
 	source DONE
 	gh DONE
 	aip DONE
 	upgrade
 	
-	get-settings
-	bu
+	get-settings DONE
+	bu DONE
 	--version ou -v DONE

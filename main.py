@@ -1,3 +1,6 @@
+from commands.help import aip_help
+from commands.settings_json import get_settings
+from commands.gh import backup, repos_get
 import os
 import sys
 from commands.create import create
@@ -6,9 +9,8 @@ from commands.remove import remove
 from commands.settings import (
     open_projet_folder,
     get_full_settings,
-    os_commands
 )
-from commands.upgrade import upgrade
+from commands.upgrade import check_version
 
 
 def main():
@@ -60,29 +62,35 @@ def main():
             else:
                 open_projet_folder("default", "")
 
-        elif command == "source":
+        elif command == "--source":
             os.system(f"{get_full_settings()[3]} {os.getcwd()}")
 
-        elif command == "settings":
+        elif command == "--settings":
             os.system(f"{get_full_settings()[3]} {os.getcwd()}/settings.json")
 
         elif command == "gh":
             print(get_full_settings()[2])
 
         elif command == "repos":
-            pass
+            repos_get()
 
         elif command == "aip":
             os.system("start https://github.com/Smoqu/AIP")
 
-        elif command == "upgrade":
-            upgrade()
+        elif command == "--upgrade":
+            check_version()
+
+        elif command == "--get-settings":
+            get_settings()
+
+        elif command == "-bu" or command == "--backup":
+            backup()
 
         else:
-            pass
+            aip_help()
 
     else:
-        print("HElp")
+        aip_help()
 
 
 if __name__ == "__main__":
