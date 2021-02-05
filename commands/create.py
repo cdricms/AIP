@@ -40,7 +40,7 @@ def create(foldername: str, application: str):
                     for package in settings['packages']:
                         os.system(f"echo {package} >> requirements.txt")
 
-                        execute_commands(settings["commands"])
+                    execute_commands(settings["commands"])
 
         if init:
             try:
