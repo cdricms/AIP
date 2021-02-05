@@ -4,6 +4,7 @@ import os
 
 
 def create(foldername: str, application: str):
+    settings_application = get_app_settings(application)
     settings = get_full_settings()
     gh_unauthorized = settings[2]
     project_folder = settings[0]
@@ -34,13 +35,13 @@ def create(foldername: str, application: str):
 
         if (application != "default"):
             print(f'=========={application.upper()}==========')
-            if application == settings["application"]:
+            if application == settings_application["application"]:
               # TODO: add the package.json posibility with both npm and yarn
-                if len(settings['packages']) > 0 and settings['package_origin'] == "requirements.txt":
-                    for package in settings['packages']:
+                if len(settings_application['packages']) > 0 and settings_application['package_origin'] == "requirements.txt":
+                    for package in settings_application['packages']:
                         os.system(f"echo {package} >> requirements.txt")
 
-                    execute_commands(settings["commands"])
+                execute_commands(settings_application["commands"])
 
         if init:
             try:
