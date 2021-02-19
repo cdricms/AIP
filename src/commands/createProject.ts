@@ -1,12 +1,17 @@
-import { mkdir } from "fs";
+import { exec } from "shelljs";
+import { mkdirSync } from "fs";
 import inquirer from "inquirer";
 import { join } from "path";
+import { chdir, exit } from "process";
 import { Application } from "../interfaces/settings";
 import isRequired from "../utils/isRequired";
 // import * as os from "fs";
-import { getAppSettings, getFullSettings } from "./settings";
+import { executeCommands, getAppSettings, getFullSettings } from "./settings";
 
-function createProject(projectName: string, application = "default") {
+export default function createProject(
+  projectName: string,
+  application = "default"
+) {
   let settingsApplication = getAppSettings(application);
   const settings = getFullSettings();
   const { ghUnauthorized, projectFolder } = {
@@ -14,37 +19,60 @@ function createProject(projectName: string, application = "default") {
     projectFolder: settings.projectPath,
   };
 
-  let init = false;
-  let isPrivate: boolean;
-
   let _dir = join(projectFolder, projectName);
+
+  const createLocally = (dir: string) => {
+    try {
+      mkdirSync(dir);
+      chdir(dir);
+      console.log("Opening in: ", process.cwd().magenta);
+
+      if (application !== "default") {
+        console.log(
+          `===============${application.toUpperCase()}===============`.cyan
+        );
+        settingsApplication = getAppSettings(application) as Application;
+        if (application === settingsApplication.application) {
+          if (
+            settingsApplication.packages.length > 0 &&
+            settingsApplication.package_origin === "requirements.txt"
+          ) {
+            for (let p of settingsApplication.packages) {
+              exec(`echo ${p} >> requirements.txt`);
+            }
+          }
+          executeCommands(settingsApplication.commands);
+        }
+      }
+      exec(`${settings.editor} .`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   if (application !== "default") {
     settingsApplication = getAppSettings(application) as Application;
     _dir = join(projectFolder, settingsApplication.path, projectName);
   }
-
-  if (ghUnauthorized.includes(application)) {
+  if (!ghUnauthorized.includes(application)) {
     inquirer
       .prompt([
         {
           type: "confirm",
-          default: "Y",
+          default: true,
           message: "Create a GitHub repository?".green,
           name: "createRepo",
           validate: isRequired,
         },
       ])
-      .then((answer: string) => {
-        if (answer === "Y") {
-          console.log("YEAYYYY");
-        } else console.error("Ohhhhh");
+      .then((answer: { createRepo: boolean }) => {
+        if (answer.createRepo) {
+          console.log("Create a repo");
+          createLocally(_dir);
+        } else createLocally(_dir);
       });
-
-    const createLocally = () => {
-      try {
-        mkdir();
-      } catch (error) {}
-    };
+  } else {
+    console.log("I am default");
+    createLocally(_dir);
   }
 }

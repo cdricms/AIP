@@ -1,49 +1,62 @@
 import inquirer from "inquirer";
 import path from "path";
-import c_process from "child_process";
+import shell from "shelljs";
 import * as aipSets from "./commands/settings.js";
 import getHelp from "./commands/help.js";
 import "colors";
 import isRequired from "./utils/isRequired.js";
+import createProject from "./commands/createProject.js";
+import removeProject from "./commands/removeProject.js";
+import { openProjectsFolder } from "./commands/settings.js";
 
 if (process.argv.length > 2) {
   const command = process.argv[2];
   if (command.length > 0) {
+    const checkArgs = () => {
+      if (process.argv[3]) {
+        let application = "default";
+        const projectName = process.argv[3];
+        if (process.argv[4]) {
+          application = process.argv[4];
+        }
+        return { projectName, application };
+      }
+    };
+
+    const { projectName, application } = { ...checkArgs() };
     switch (command) {
       case "create":
-        inquirer
-          .prompt([
-            {
-              type: "confirm",
-              default: "Y",
-              message: "Create a GitHub repository?".green,
-              name: "createRepo",
-              validate: isRequired,
-            },
-          ])
-          .then((answer: { createRepo: boolean }) => {
-            if (answer.createRepo) {
-              console.log("YEAYYYY");
-            } else console.error("Ohhhhh");
-          });
-
+        createProject(projectName, application);
         break;
+      case "remove":
+        removeProject(projectName, application);
+        break;
+      case "pf":
+        if (process.argv[2]) openProjectsFolder(application, process.argv[2]);
+        break;
+
       case "--settings":
-        c_process.exec(`${aipSets.osCommands.launch}, ${aipSets.settingsPath}`);
+        shell.exec(`${aipSets.osCommands.launch}, ${aipSets.settingsPath}`);
         break;
 
       case "--source":
-        c_process.exec(`${aipSets.getFullSettings().editor} ${process.cwd()}`);
+        shell.exec(`${aipSets.getFullSettings().editor} ${process.cwd()}`);
         break;
+
       case "gh":
         console.log(aipSets.getFullSettings().ghUnauthorized);
         break;
 
       // TODO: Repos
       case "aip":
-        c_process.exec(
+        shell.exec(
           `${aipSets.osCommands.launch} https://github.com/Smoqu/AIP"`
         );
+        break;
+
+      case "--version":
+      case "-v":
+        console.log(aipSets.getFullSettings().version);
         break;
 
       // TODO: Upgrade

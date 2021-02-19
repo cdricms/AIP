@@ -22,48 +22,54 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const inquirer_1 = __importDefault(require("inquirer"));
-const child_process_1 = __importDefault(require("child_process"));
+const shelljs_1 = __importDefault(require("shelljs"));
 const aipSets = __importStar(require("./commands/settings.js"));
 const help_js_1 = __importDefault(require("./commands/help.js"));
 require("colors");
-const isRequired_js_1 = __importDefault(require("./utils/isRequired.js"));
+const createProject_js_1 = __importDefault(require("./commands/createProject.js"));
+const removeProject_js_1 = __importDefault(require("./commands/removeProject.js"));
+const settings_js_1 = require("./commands/settings.js");
 if (process.argv.length > 2) {
     const command = process.argv[2];
     if (command.length > 0) {
+        const checkArgs = () => {
+            if (process.argv[3]) {
+                let application = "default";
+                const projectName = process.argv[3];
+                if (process.argv[4]) {
+                    application = process.argv[4];
+                }
+                return { projectName, application };
+            }
+        };
+        const { projectName, application } = Object.assign({}, checkArgs());
         switch (command) {
             case "create":
-                inquirer_1.default
-                    .prompt([
-                    {
-                        type: "confirm",
-                        default: "Y",
-                        message: "Create a GitHub repository?".green,
-                        name: "createRepo",
-                        validate: isRequired_js_1.default,
-                    },
-                ])
-                    .then((answer) => {
-                    if (answer.createRepo) {
-                        console.log("YEAYYYY");
-                    }
-                    else
-                        console.error("Ohhhhh");
-                });
-                console.log("Okay it runs");
+                createProject_js_1.default(projectName, application);
+                break;
+            case "remove":
+                removeProject_js_1.default(projectName, application);
+                break;
+            case "pf":
+                if (process.argv[2])
+                    settings_js_1.openProjectsFolder(application, process.argv[2]);
                 break;
             case "--settings":
-                child_process_1.default.exec(`${aipSets.osCommands.launch}, ${aipSets.settingsPath}`);
+                shelljs_1.default.exec(`${aipSets.osCommands.launch}, ${aipSets.settingsPath}`);
                 break;
             case "--source":
-                child_process_1.default.exec(`${aipSets.getFullSettings().editor} ${process.cwd()}`);
+                shelljs_1.default.exec(`${aipSets.getFullSettings().editor} ${process.cwd()}`);
                 break;
             case "gh":
                 console.log(aipSets.getFullSettings().ghUnauthorized);
                 break;
             // TODO: Repos
             case "aip":
-                child_process_1.default.exec(`${aipSets.osCommands.launch} https://github.com/Smoqu/AIP"`);
+                shelljs_1.default.exec(`${aipSets.osCommands.launch} https://github.com/Smoqu/AIP"`);
+                break;
+            case "--version":
+            case "-v":
+                console.log(aipSets.getFullSettings().version);
                 break;
             // TODO: Upgrade
             // TODO: Get settings

@@ -4,14 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.executeCommands = exports.getAppSettings = exports.getFullSettings = exports.openProjectsFolder = exports.osCommands = exports.openSettings = exports.settingsPath = void 0;
-const child_process_1 = __importDefault(require("child_process"));
+const shelljs_1 = __importDefault(require("shelljs"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const settings = "settings.json";
 exports.settingsPath = path_1.default.join(process.cwd(), settings);
 const aipConfig = "aipconfig.json";
 const aipConfigPath = path_1.default.join(process.cwd(), aipConfig);
-const openSettings = () => child_process_1.default.exec(exports.settingsPath);
+const openSettings = () => shelljs_1.default.exec(exports.settingsPath);
 exports.openSettings = openSettings;
 function fsOpenSettings() {
     return JSON.parse(fs_1.default.readFileSync(exports.settingsPath, "utf-8"));
@@ -28,9 +28,9 @@ function openProjectsFolder(application, flag) {
     let p;
     const getFlag = (path) => {
         if (flag === "")
-            child_process_1.default.exec(path);
+            shelljs_1.default.exec(`${exports.osCommands.explorer} "${path}"`);
         else if (flag === "-l")
-            child_process_1.default.exec(`${exports.osCommands.ls} ${path}`);
+            shelljs_1.default.exec(`${exports.osCommands.ls} "${path}"`);
     };
     if (application === "default") {
         p = projectFolder;
@@ -63,7 +63,13 @@ function getAppSettings(application) {
         if (application !== "default") {
             const applicationSettings = applications.find((app) => app.application === application);
             if (applicationSettings) {
-                return Object.assign({}, applicationSettings);
+                return {
+                    application: applicationSettings.application,
+                    commands: applicationSettings.commands,
+                    package_origin: applicationSettings.package_origin,
+                    packages: applicationSettings.packages,
+                    path: applicationSettings.path,
+                };
             }
             else
                 return settingsData.project_path;
@@ -72,13 +78,11 @@ function getAppSettings(application) {
     catch (error) {
         console.error(error);
     }
-    finally {
-        return settingsData.project_path;
-    }
+    return settingsData.project_path;
 }
 exports.getAppSettings = getAppSettings;
 function executeCommands(commands) {
     for (let command of commands)
-        child_process_1.default.exec(command);
+        shelljs_1.default.exec(command);
 }
 exports.executeCommands = executeCommands;

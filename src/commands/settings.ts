@@ -1,4 +1,4 @@
-import child_process from "child_process";
+import shell from "shelljs";
 import path from "path";
 import fs from "fs";
 import Settings, { Application } from "../interfaces/settings";
@@ -8,7 +8,7 @@ export const settingsPath = path.join(process.cwd(), settings);
 const aipConfig = "aipconfig.json";
 const aipConfigPath = path.join(process.cwd(), aipConfig);
 
-export const openSettings = () => child_process.exec(settingsPath);
+export const openSettings = () => shell.exec(settingsPath);
 
 function fsOpenSettings(): Settings {
   return JSON.parse(fs.readFileSync(settingsPath, "utf-8"));
@@ -30,8 +30,8 @@ export function openProjectsFolder(application: string, flag: string) {
   let p: string;
 
   const getFlag = (path: string) => {
-    if (flag === "") child_process.exec(path);
-    else if (flag === "-l") child_process.exec(`${osCommands.ls} ${path}`);
+    if (flag === "") shell.exec(`${osCommands.explorer} "${path}"`);
+    else if (flag === "-l") shell.exec(`${osCommands.ls} "${path}"`);
   };
 
   if (application === "default") {
@@ -72,16 +72,22 @@ export function getAppSettings(application: string): Application | string {
       );
 
       if (applicationSettings) {
-        return { ...applicationSettings };
+        return {
+          application: applicationSettings.application,
+          commands: applicationSettings.commands,
+          package_origin: applicationSettings.package_origin,
+          packages: applicationSettings.packages,
+          path: applicationSettings.path,
+        };
       } else return settingsData.project_path;
     }
   } catch (error) {
     console.error(error);
-  } finally {
-    return settingsData.project_path;
   }
+
+  return settingsData.project_path;
 }
 
 export function executeCommands(commands: Array<string>) {
-  for (let command of commands) child_process.exec(command);
+  for (let command of commands) shell.exec(command);
 }
