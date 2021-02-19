@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "@types/inquirer": "^7.3.1",
+    "@types/node": "^14.14.30",
+    "colors": "^1.4.0",
+    "inquirer": "^7.3.3"
+  },
+  "name": "aip-ts",
+  "version": "1.0.0",
+  "main": "./out/main.js",
+  "author": "Cédric MAS",
+  "license": "MIT",
+  "private": true,
+  "bin": "./out",
+  "scripts": {
+    "build": "tsc && pkg out/main.js"
+  },
+  "pkg": {
+    "scripts": "out/**/*.js"
+  }
+}
