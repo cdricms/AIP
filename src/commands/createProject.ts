@@ -78,7 +78,6 @@ export default function createProject(
             ])
             .then((answer: { isPrivate: string }) => {
               if (answer.isPrivate === "Private") {
-                // TODO: GitHub repo
                 createLocally(_dir);
                 createRepo(projectName, true);
               } else {

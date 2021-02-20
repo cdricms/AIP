@@ -71,7 +71,6 @@ function createProject(projectName, application = "default") {
                 ])
                     .then((answer) => {
                     if (answer.isPrivate === "Private") {
-                        // TODO: GitHub repo
                         createLocally(_dir);
                         github_1.createRepo(projectName, true);
                     }

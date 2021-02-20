@@ -73,14 +73,13 @@ if (process.argv.length > 2) {
         console.log(aipSets.getFullSettings().ghUnauthorized);
         break;
 
-      // TODO: Repos
       case "repos":
         if (env.token) {
           console.log("[GITHUB]".red);
           getRepos();
         } else {
           console.log(
-            "To use this functionnality you must have a GitHub token inside the .env file\n written like so: AIP_GH_TOKEN=YourToken".bold()
+            "To use this functionnality you must have a GitHub token inside the .env file\n written like so: AIP_GH_TOKEN=YourToken"
               .bgRed
           );
         }
