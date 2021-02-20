@@ -32,7 +32,15 @@ if (process.argv.length > 2) {
         removeProject(projectName, application);
         break;
       case "pf":
-        if (process.argv[2]) openProjectsFolder(application, process.argv[2]);
+        if (process.argv.length === 3) openProjectsFolder("default", "");
+        else if (process.argv[3]) {
+          if (process.argv[3] === "-l") openProjectsFolder("default", "-l");
+          else {
+            if (process.argv[4] && process.argv[4] === "-l")
+              openProjectsFolder(process.argv[3], process.argv[4]);
+            else openProjectsFolder(process.argv[3], "");
+          }
+        }
         break;
 
       case "--settings":

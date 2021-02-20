@@ -31,18 +31,16 @@ export default function createProject(
         console.log(
           `===============${application.toUpperCase()}===============`.cyan
         );
-        settingsApplication = getAppSettings(application) as Application;
-        if (application === settingsApplication.application) {
-          if (
-            settingsApplication.packages.length > 0 &&
-            settingsApplication.package_origin === "requirements.txt"
-          ) {
-            for (let p of settingsApplication.packages) {
-              exec(`echo ${p} >> requirements.txt`);
-            }
+        settingsApplication = getAppSettings(application);
+        if (
+          settingsApplication.packages.length > 0 &&
+          settingsApplication.package_origin === "requirements.txt"
+        ) {
+          for (let p of settingsApplication.packages) {
+            exec(`echo ${p} >> requirements.txt`);
           }
-          executeCommands(settingsApplication.commands);
         }
+        executeCommands(settingsApplication.commands);
       }
       exec(`${settings.editor} .`);
     } catch (error) {
@@ -67,12 +65,29 @@ export default function createProject(
       ])
       .then((answer: { createRepo: boolean }) => {
         if (answer.createRepo) {
-          console.log("Create a repo");
-          createLocally(_dir);
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                choices: ["Private", "Public"],
+                default: 0,
+                message: "Private or public".green,
+                name: "isPrivate",
+              },
+            ])
+            .then((answer: { isPrivate: string }) => {
+              if (answer.isPrivate === "Private") {
+                // TODO: GitHub repo
+                console.log("Private");
+                createLocally(_dir);
+              } else {
+                console.log("Public");
+                createLocally(_dir);
+              }
+            });
         } else createLocally(_dir);
       });
   } else {
-    console.log("I am default");
     createLocally(_dir);
   }
 }

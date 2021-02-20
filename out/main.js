@@ -51,8 +51,18 @@ if (process.argv.length > 2) {
                 removeProject_js_1.default(projectName, application);
                 break;
             case "pf":
-                if (process.argv[2])
-                    settings_js_1.openProjectsFolder(application, process.argv[2]);
+                if (process.argv.length === 3)
+                    settings_js_1.openProjectsFolder("default", "");
+                else if (process.argv[3]) {
+                    if (process.argv[3] === "-l")
+                        settings_js_1.openProjectsFolder("default", "-l");
+                    else {
+                        if (process.argv[4] && process.argv[4] === "-l")
+                            settings_js_1.openProjectsFolder(process.argv[3], process.argv[4]);
+                        else
+                            settings_js_1.openProjectsFolder(process.argv[3], "");
+                    }
+                }
                 break;
             case "--settings":
                 shelljs_1.default.exec(`${aipSets.osCommands.launch}, ${aipSets.settingsPath}`);

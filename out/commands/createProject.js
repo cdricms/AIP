@@ -27,15 +27,13 @@ function createProject(projectName, application = "default") {
             if (application !== "default") {
                 console.log(`===============${application.toUpperCase()}===============`.cyan);
                 settingsApplication = settings_1.getAppSettings(application);
-                if (application === settingsApplication.application) {
-                    if (settingsApplication.packages.length > 0 &&
-                        settingsApplication.package_origin === "requirements.txt") {
-                        for (let p of settingsApplication.packages) {
-                            shelljs_1.exec(`echo ${p} >> requirements.txt`);
-                        }
+                if (settingsApplication.packages.length > 0 &&
+                    settingsApplication.package_origin === "requirements.txt") {
+                    for (let p of settingsApplication.packages) {
+                        shelljs_1.exec(`echo ${p} >> requirements.txt`);
                     }
-                    settings_1.executeCommands(settingsApplication.commands);
                 }
+                settings_1.executeCommands(settingsApplication.commands);
             }
             shelljs_1.exec(`${settings.editor} .`);
         }
@@ -60,15 +58,33 @@ function createProject(projectName, application = "default") {
         ])
             .then((answer) => {
             if (answer.createRepo) {
-                console.log("Create a repo");
-                createLocally(_dir);
+                inquirer_1.default
+                    .prompt([
+                    {
+                        type: "list",
+                        choices: ["Private", "Public"],
+                        default: 0,
+                        message: "Private or public".green,
+                        name: "isPrivate",
+                    },
+                ])
+                    .then((answer) => {
+                    if (answer.isPrivate === "Private") {
+                        // TODO: GitHub repo
+                        console.log("Private");
+                        createLocally(_dir);
+                    }
+                    else {
+                        console.log("Public");
+                        createLocally(_dir);
+                    }
+                });
             }
             else
                 createLocally(_dir);
         });
     }
     else {
-        console.log("I am default");
         createLocally(_dir);
     }
 }

@@ -25,18 +25,19 @@ else osCommands = { ls: "ls", explorer: "xdg-open", launch: "xdg-open" };
 export function openProjectsFolder(application: string, flag: string) {
   const settingsData = fsOpenSettings();
 
-  const projectFolder = settingsData.project_path;
+  const projectFolder = path.join(settingsData.project_path);
 
   let p: string;
 
   const getFlag = (path: string) => {
-    if (flag === "") shell.exec(`${osCommands.explorer} "${path}"`);
-    else if (flag === "-l") shell.exec(`${osCommands.ls} "${path}"`);
+    if (flag === "") {
+      console.log(path.magenta);
+      shell.exec(`${osCommands.explorer} ${path}`);
+    } else if (flag === "-l") shell.exec(`${osCommands.ls} "${path}"`);
   };
 
   if (application === "default") {
-    p = projectFolder;
-    getFlag(p);
+    getFlag(projectFolder);
   } else {
     const appSettings = getAppSettings(application) as Application;
     const pathApp = appSettings.path;
@@ -48,10 +49,11 @@ export function openProjectsFolder(application: string, flag: string) {
 
 export function getFullSettings() {
   const settingsData = fsOpenSettings();
-  const { projectPath, ghUnauthorized, editor } = {
+  const { projectPath, ghUnauthorized, editor, applications } = {
     projectPath: settingsData.project_path,
     ghUnauthorized: settingsData.gh_unauthorized,
     editor: settingsData.editor,
+    applications: settingsData.applications,
   };
 
   const aipConfigData: { version: string } = JSON.parse(
@@ -59,10 +61,10 @@ export function getFullSettings() {
   );
   const version = aipConfigData.version;
 
-  return { projectPath, ghUnauthorized, editor, version };
+  return { projectPath, ghUnauthorized, editor, version, applications };
 }
 
-export function getAppSettings(application: string): Application | string {
+export function getAppSettings(application: string): Application {
   const settingsData = fsOpenSettings();
   try {
     const applications = settingsData.applications;
@@ -79,13 +81,26 @@ export function getAppSettings(application: string): Application | string {
           packages: applicationSettings.packages,
           path: applicationSettings.path,
         };
-      } else return settingsData.project_path;
+      } else
+        return {
+          path: settingsData.project_path,
+          application: "",
+          commands: [],
+          package_origin: "",
+          packages: [],
+        };
     }
   } catch (error) {
     console.error(error);
   }
 
-  return settingsData.project_path;
+  return {
+    path: settingsData.project_path,
+    application: "",
+    commands: [],
+    package_origin: "",
+    packages: [],
+  };
 }
 
 export function executeCommands(commands: Array<string>) {

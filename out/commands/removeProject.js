@@ -32,7 +32,7 @@ function removeProject(projectName, application = "default") {
                 {
                     type: "confirm",
                     default: false,
-                    message: `Are you sure you want to delete locally the project ${projectName}`
+                    message: `Are you sure you want to delete locally the project ${projectName.bgGreen.white}`
                         .red,
                     name: "confirmDeletion",
                 },

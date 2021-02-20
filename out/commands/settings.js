@@ -24,17 +24,18 @@ else
     exports.osCommands = { ls: "ls", explorer: "xdg-open", launch: "xdg-open" };
 function openProjectsFolder(application, flag) {
     const settingsData = fsOpenSettings();
-    const projectFolder = settingsData.project_path;
+    const projectFolder = path_1.default.join(settingsData.project_path);
     let p;
     const getFlag = (path) => {
-        if (flag === "")
-            shelljs_1.default.exec(`${exports.osCommands.explorer} "${path}"`);
+        if (flag === "") {
+            console.log(path.magenta);
+            shelljs_1.default.exec(`${exports.osCommands.explorer} ${path}`);
+        }
         else if (flag === "-l")
             shelljs_1.default.exec(`${exports.osCommands.ls} "${path}"`);
     };
     if (application === "default") {
-        p = projectFolder;
-        getFlag(p);
+        getFlag(projectFolder);
     }
     else {
         const appSettings = getAppSettings(application);
@@ -46,14 +47,15 @@ function openProjectsFolder(application, flag) {
 exports.openProjectsFolder = openProjectsFolder;
 function getFullSettings() {
     const settingsData = fsOpenSettings();
-    const { projectPath, ghUnauthorized, editor } = {
+    const { projectPath, ghUnauthorized, editor, applications } = {
         projectPath: settingsData.project_path,
         ghUnauthorized: settingsData.gh_unauthorized,
         editor: settingsData.editor,
+        applications: settingsData.applications,
     };
     const aipConfigData = JSON.parse(fs_1.default.readFileSync(aipConfigPath, "utf-8"));
     const version = aipConfigData.version;
-    return { projectPath, ghUnauthorized, editor, version };
+    return { projectPath, ghUnauthorized, editor, version, applications };
 }
 exports.getFullSettings = getFullSettings;
 function getAppSettings(application) {
@@ -72,13 +74,25 @@ function getAppSettings(application) {
                 };
             }
             else
-                return settingsData.project_path;
+                return {
+                    path: settingsData.project_path,
+                    application: "",
+                    commands: [],
+                    package_origin: "",
+                    packages: [],
+                };
         }
     }
     catch (error) {
         console.error(error);
     }
-    return settingsData.project_path;
+    return {
+        path: settingsData.project_path,
+        application: "",
+        commands: [],
+        package_origin: "",
+        packages: [],
+    };
 }
 exports.getAppSettings = getAppSettings;
 function executeCommands(commands) {
