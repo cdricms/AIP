@@ -42,6 +42,7 @@ const openProject_js_1 = __importDefault(require("./commands/openProject.js"));
 const createProject_js_1 = __importDefault(require("./commands/createProject.js"));
 const removeProject_js_1 = __importDefault(require("./commands/removeProject.js"));
 const settings_js_1 = require("./commands/settings.js");
+const github_js_1 = require("./commands/github.js");
 if (process.argv.length > 2) {
     const command = process.argv[2];
     if (command.length > 0) {
@@ -93,6 +94,16 @@ if (process.argv.length > 2) {
                 console.log(aipSets.getFullSettings().ghUnauthorized);
                 break;
             // TODO: Repos
+            case "repos":
+                if (exports.env.token) {
+                    console.log("[GITHUB]".red);
+                    github_js_1.getRepos();
+                }
+                else {
+                    console.log("To use this functionnality you must have a GitHub token inside the .env file\n written like so: AIP_GH_TOKEN=YourToken".bold()
+                        .bgRed);
+                }
+                break;
             case "aip":
                 shelljs_1.default.exec(`${aipSets.osCommands.launch} https://github.com/Smoqu/AIP"`);
                 break;

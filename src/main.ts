@@ -21,6 +21,7 @@ import openProject from "./commands/openProject.js";
 import createProject from "./commands/createProject.js";
 import removeProject from "./commands/removeProject.js";
 import { openProjectsFolder } from "./commands/settings.js";
+import { getRepos } from "./commands/github.js";
 
 if (process.argv.length > 2) {
   const command = process.argv[2];
@@ -73,6 +74,17 @@ if (process.argv.length > 2) {
         break;
 
       // TODO: Repos
+      case "repos":
+        if (env.token) {
+          console.log("[GITHUB]".red);
+          getRepos();
+        } else {
+          console.log(
+            "To use this functionnality you must have a GitHub token inside the .env file\n written like so: AIP_GH_TOKEN=YourToken".bold()
+              .bgRed
+          );
+        }
+        break;
       case "aip":
         shell.exec(
           `${aipSets.osCommands.launch} https://github.com/Smoqu/AIP"`

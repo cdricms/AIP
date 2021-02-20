@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteRepo = exports.createRepo = void 0;
+exports.getRepos = exports.deleteRepo = exports.createRepo = void 0;
 const rest_1 = require("@octokit/rest");
 const main_1 = require("../main");
 const octokit = new rest_1.Octokit({ auth: main_1.env.token });
@@ -22,3 +22,14 @@ function deleteRepo(repo) {
     });
 }
 exports.deleteRepo = deleteRepo;
+function getRepos() {
+    octokit.repos
+        .listForAuthenticatedUser({ per_page: 100, sort: "updated" })
+        .then((data) => {
+        data.data.forEach((d) => {
+            console.log(`${d.name}: ${d.private ? "Private".green : "Public".yellow}`);
+        });
+        console.log("TOTAL: ".green + data.data.length);
+    });
+}
+exports.getRepos = getRepos;

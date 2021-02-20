@@ -21,3 +21,16 @@ export function deleteRepo(repo: string) {
       .then((data) => console.log("[GITHUB] ".red + "repository deleted"));
   });
 }
+
+export function getRepos() {
+  octokit.repos
+    .listForAuthenticatedUser({ per_page: 100, sort: "updated" })
+    .then((data) => {
+      data.data.forEach((d) => {
+        console.log(
+          `${d.name}: ${d.private ? "Private".green : "Public".yellow}`
+        );
+      });
+      console.log("TOTAL: ".green + data.data.length);
+    });
+}
