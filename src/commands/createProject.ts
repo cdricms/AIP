@@ -45,7 +45,9 @@ export default function createProject(
       }
       exec(`${settings.editor} .`);
     } catch (error) {
-      console.error(error);
+      if (error.code === "EEXIST")
+        console.log(`This project already exists at ${error.path} !`.red);
+      else console.error(error);
     }
   };
 

@@ -39,7 +39,10 @@ function createProject(projectName, application = "default") {
             shelljs_1.exec(`${settings.editor} .`);
         }
         catch (error) {
-            console.error(error);
+            if (error.code === "EEXIST")
+                console.log(`This project already exists at ${error.path} !`.red);
+            else
+                console.error(error);
         }
     };
     if (application !== "default") {

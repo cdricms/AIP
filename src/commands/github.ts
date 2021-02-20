@@ -14,23 +14,35 @@ export function createRepo(folderName: string, isPrivate: boolean) {
     );
 }
 
-export function deleteRepo(repo: string) {
-  octokit.users.getAuthenticated().then((user) => {
-    octokit.repos
-      .delete({ owner: user.data.login, repo })
-      .then((data) => console.log("[GITHUB] ".red + "repository deleted"));
-  });
+export async function deleteRepo(repo: string) {
+  const userData = await octokit.users.getAuthenticated();
+  const owner = userData.data.login;
+  await octokit.repos.delete({ owner, repo });
 }
 
-export function getRepos() {
-  octokit.repos
-    .listForAuthenticatedUser({ per_page: 100, sort: "updated" })
-    .then((data) => {
-      data.data.forEach((d) => {
-        console.log(
-          `${d.name}: ${d.private ? "Private".green : "Public".yellow}`
-        );
-      });
-      console.log("TOTAL: ".green + data.data.length);
+export async function repoAlreadyExists(repo: string) {
+  try {
+    const user = await octokit.users.getAuthenticated();
+    const repository = await octokit.repos.get({
+      owner: user.data.login,
+      repo,
     });
+
+    if (repository) return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+export async function getRepos() {
+  const repos = await octokit.repos.listForAuthenticatedUser({
+    per_page: 100,
+    sort: "updated",
+  });
+
+  repos.data.forEach((d) => {
+    console.log(`${d.name}: ${d.private ? "Private".green : "Public".yellow}`);
+  });
+
+  console.log("TOTAL: ".green + repos.data.length);
 }
