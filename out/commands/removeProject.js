@@ -3,9 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeGithubProject = void 0;
 const fs_1 = require("fs");
 const inquirer_1 = __importDefault(require("inquirer"));
 const path_1 = require("path");
+const main_1 = require("../main");
+const github_1 = require("./github");
 const settings_1 = require("./settings");
 function removeProject(projectName, application = "default") {
     try {
@@ -41,6 +44,8 @@ function removeProject(projectName, application = "default") {
                 if (answer.confirmDeletion) {
                     removeTree(_dir);
                     console.log(`${_dir} has been sucessfully removed!`.red);
+                    if (main_1.env.token)
+                        removeGithubProject(projectName);
                 }
                 else {
                     console.log("Nothing has been deleted".green);
@@ -56,3 +61,24 @@ function removeProject(projectName, application = "default") {
     }
 }
 exports.default = removeProject;
+function removeGithubProject(repo) {
+    inquirer_1.default
+        .prompt([
+        {
+            type: "confirm",
+            default: false,
+            message: "[GITHUB]\n".red +
+                "are you sure you want to delete this repository: " +
+                repo.green +
+                " ?",
+            name: "removeRepo",
+        },
+    ])
+        .then((data) => {
+        if (data.removeRepo)
+            github_1.deleteRepo(repo);
+        else
+            console.log("[GITHUB] ".red + "repository not deleted.".green);
+    });
+}
+exports.removeGithubProject = removeGithubProject;

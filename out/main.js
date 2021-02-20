@@ -22,6 +22,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.env = void 0;
+const path_1 = require("path");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config({ path: path_1.join(process.cwd(), ".env") });
+exports.env = {
+    token: "",
+    gist: "",
+};
+if (process.env.AIP_GH_TOKEN)
+    exports.env.token = process.env.AIP_GH_TOKEN;
+if (process.env.AIP_GIST)
+    exports.env.gist = process.env.AIP_GIST;
 const shelljs_1 = __importDefault(require("shelljs"));
 const aipSets = __importStar(require("./commands/settings.js"));
 const help_js_1 = __importDefault(require("./commands/help.js"));

@@ -2,6 +2,8 @@ import { rmdirSync } from "fs";
 import inquirer from "inquirer";
 import { join } from "path";
 import { Application } from "../interfaces/settings";
+import { env } from "../main";
+import { deleteRepo } from "./github";
 import { getAppSettings, getFullSettings } from "./settings";
 
 export default function removeProject(
@@ -45,6 +47,7 @@ export default function removeProject(
           if (answer.confirmDeletion) {
             removeTree(_dir);
             console.log(`${_dir} has been sucessfully removed!`.red);
+            if (env.token) removeGithubProject(projectName);
           } else {
             console.log("Nothing has been deleted".green);
           }
@@ -55,4 +58,24 @@ export default function removeProject(
   } catch (error) {
     console.error(error);
   }
+}
+
+export function removeGithubProject(repo: string) {
+  inquirer
+    .prompt([
+      {
+        type: "confirm",
+        default: false,
+        message:
+          "[GITHUB]\n".red +
+          "are you sure you want to delete this repository: " +
+          repo.green +
+          " ?",
+        name: "removeRepo",
+      },
+    ])
+    .then((data: { removeRepo: boolean }) => {
+      if (data.removeRepo) deleteRepo(repo);
+      else console.log("[GITHUB] ".red + "repository not deleted.".green);
+    });
 }

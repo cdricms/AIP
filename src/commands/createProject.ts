@@ -2,11 +2,12 @@ import { exec } from "shelljs";
 import { mkdirSync } from "fs";
 import inquirer from "inquirer";
 import { join } from "path";
-import { chdir, exit } from "process";
+import { chdir } from "process";
 import { Application } from "../interfaces/settings";
 import isRequired from "../utils/isRequired";
-// import * as os from "fs";
 import { executeCommands, getAppSettings, getFullSettings } from "./settings";
+import { env } from "../main";
+import { createRepo } from "./github";
 
 export default function createProject(
   projectName: string,
@@ -52,7 +53,7 @@ export default function createProject(
     settingsApplication = getAppSettings(application) as Application;
     _dir = join(projectFolder, settingsApplication.path, projectName);
   }
-  if (!ghUnauthorized.includes(application)) {
+  if (!ghUnauthorized.includes(application) && env.token) {
     inquirer
       .prompt([
         {
@@ -78,11 +79,11 @@ export default function createProject(
             .then((answer: { isPrivate: string }) => {
               if (answer.isPrivate === "Private") {
                 // TODO: GitHub repo
-                console.log("Private");
                 createLocally(_dir);
+                createRepo(projectName, true);
               } else {
-                console.log("Public");
                 createLocally(_dir);
+                createRepo(projectName, false);
               }
             });
         } else createLocally(_dir);

@@ -9,8 +9,9 @@ const inquirer_1 = __importDefault(require("inquirer"));
 const path_1 = require("path");
 const process_1 = require("process");
 const isRequired_1 = __importDefault(require("../utils/isRequired"));
-// import * as os from "fs";
 const settings_1 = require("./settings");
+const main_1 = require("../main");
+const github_1 = require("./github");
 function createProject(projectName, application = "default") {
     let settingsApplication = settings_1.getAppSettings(application);
     const settings = settings_1.getFullSettings();
@@ -45,7 +46,7 @@ function createProject(projectName, application = "default") {
         settingsApplication = settings_1.getAppSettings(application);
         _dir = path_1.join(projectFolder, settingsApplication.path, projectName);
     }
-    if (!ghUnauthorized.includes(application)) {
+    if (!ghUnauthorized.includes(application) && main_1.env.token) {
         inquirer_1.default
             .prompt([
             {
@@ -71,12 +72,12 @@ function createProject(projectName, application = "default") {
                     .then((answer) => {
                     if (answer.isPrivate === "Private") {
                         // TODO: GitHub repo
-                        console.log("Private");
                         createLocally(_dir);
+                        github_1.createRepo(projectName, true);
                     }
                     else {
-                        console.log("Public");
                         createLocally(_dir);
+                        github_1.createRepo(projectName, false);
                     }
                 });
             }

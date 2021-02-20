@@ -1,3 +1,18 @@
+import { join } from "path";
+import dotenv from "dotenv";
+dotenv.config({ path: join(process.cwd(), ".env") });
+
+export let env: {
+  token: string;
+  gist: string;
+} = {
+  token: "",
+  gist: "",
+};
+
+if (process.env.AIP_GH_TOKEN) env.token = process.env.AIP_GH_TOKEN;
+if (process.env.AIP_GIST) env.gist = process.env.AIP_GIST;
+
 import shell from "shelljs";
 import * as aipSets from "./commands/settings.js";
 import getHelp from "./commands/help.js";
