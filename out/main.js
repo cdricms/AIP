@@ -26,6 +26,7 @@ const shelljs_1 = __importDefault(require("shelljs"));
 const aipSets = __importStar(require("./commands/settings.js"));
 const help_js_1 = __importDefault(require("./commands/help.js"));
 require("colors");
+const openProject_js_1 = __importDefault(require("./commands/openProject.js"));
 const createProject_js_1 = __importDefault(require("./commands/createProject.js"));
 const removeProject_js_1 = __importDefault(require("./commands/removeProject.js"));
 const settings_js_1 = require("./commands/settings.js");
@@ -49,6 +50,12 @@ if (process.argv.length > 2) {
                 break;
             case "remove":
                 removeProject_js_1.default(projectName, application);
+                break;
+            case "open":
+                if (process.argv.length > 3)
+                    openProject_js_1.default(projectName, application);
+                else
+                    help_js_1.default();
                 break;
             case "pf":
                 if (process.argv.length === 3)

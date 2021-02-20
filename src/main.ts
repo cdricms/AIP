@@ -1,10 +1,8 @@
-import inquirer from "inquirer";
-import path from "path";
 import shell from "shelljs";
 import * as aipSets from "./commands/settings.js";
 import getHelp from "./commands/help.js";
 import "colors";
-import isRequired from "./utils/isRequired.js";
+import openProject from "./commands/openProject.js";
 import createProject from "./commands/createProject.js";
 import removeProject from "./commands/removeProject.js";
 import { openProjectsFolder } from "./commands/settings.js";
@@ -30,6 +28,10 @@ if (process.argv.length > 2) {
         break;
       case "remove":
         removeProject(projectName, application);
+        break;
+      case "open":
+        if (process.argv.length > 3) openProject(projectName, application);
+        else getHelp();
         break;
       case "pf":
         if (process.argv.length === 3) openProjectsFolder("default", "");
