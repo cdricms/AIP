@@ -3,6 +3,7 @@ import inquirer from "inquirer";
 import { join } from "path";
 import { Application } from "../interfaces/settings";
 import { env } from "../main";
+import isRequired from "../utils/isRequired";
 import { deleteRepo, repoAlreadyExists } from "./github";
 import { getAppSettings, getFullSettings } from "./settings";
 
@@ -43,6 +44,7 @@ export default function removeProject(
               message: `Are you sure you want to delete locally the project ${projectName.bgGreen.white}`
                 .red,
               name: "confirmDeletion",
+              validate: isRequired,
             },
           ])
           .then((answer: { confirmDeletion: boolean }) => {
@@ -80,6 +82,7 @@ export async function removeGithubProject(repo: string) {
             repo.green +
             " ?",
           name: "removeRepo",
+          validate: isRequired,
         },
       ])
       .then((data: { removeRepo: boolean }) => {

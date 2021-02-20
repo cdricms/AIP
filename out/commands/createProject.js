@@ -70,6 +70,7 @@ function createProject(projectName, application = "default") {
                         default: 0,
                         message: "Private or public".green,
                         name: "isPrivate",
+                        validate: isRequired_1.default,
                     },
                 ])
                     .then((answer) => {

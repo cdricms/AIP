@@ -17,6 +17,7 @@ const fs_1 = require("fs");
 const inquirer_1 = __importDefault(require("inquirer"));
 const path_1 = require("path");
 const main_1 = require("../main");
+const isRequired_1 = __importDefault(require("../utils/isRequired"));
 const github_1 = require("./github");
 const settings_1 = require("./settings");
 function removeProject(projectName, application = "default") {
@@ -50,6 +51,7 @@ function removeProject(projectName, application = "default") {
                         message: `Are you sure you want to delete locally the project ${projectName.bgGreen.white}`
                             .red,
                         name: "confirmDeletion",
+                        validate: isRequired_1.default,
                     },
                 ])
                     .then((answer) => {
@@ -91,6 +93,7 @@ function removeGithubProject(repo) {
                         repo.green +
                         " ?",
                     name: "removeRepo",
+                    validate: isRequired_1.default,
                 },
             ])
                 .then((data) => {

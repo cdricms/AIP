@@ -76,6 +76,7 @@ export default function createProject(
                 default: 0,
                 message: "Private or public".green,
                 name: "isPrivate",
+                validate: isRequired,
               },
             ])
             .then((answer: { isPrivate: string }) => {
