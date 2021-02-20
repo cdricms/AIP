@@ -43,81 +43,88 @@ const createProject_js_1 = __importDefault(require("./commands/createProject.js"
 const removeProject_js_1 = __importDefault(require("./commands/removeProject.js"));
 const settings_js_1 = require("./commands/settings.js");
 const github_js_1 = require("./commands/github.js");
-if (process.argv.length > 2) {
-    const command = process.argv[2];
-    if (command.length > 0) {
-        const checkArgs = () => {
-            if (process.argv[3]) {
-                let application = "default";
-                const projectName = process.argv[3];
-                if (process.argv[4]) {
-                    application = process.argv[4];
-                }
-                return { projectName, application };
-            }
-        };
-        const { projectName, application } = Object.assign({}, checkArgs());
-        switch (command) {
-            case "create":
-                createProject_js_1.default(projectName, application);
-                break;
-            case "remove":
-                removeProject_js_1.default(projectName, application);
-                break;
-            case "open":
-                if (process.argv.length > 3)
-                    openProject_js_1.default(projectName, application);
-                else
-                    help_js_1.default();
-                break;
-            case "pf":
-                if (process.argv.length === 3)
-                    settings_js_1.openProjectsFolder("default", "");
-                else if (process.argv[3]) {
-                    if (process.argv[3] === "-l")
-                        settings_js_1.openProjectsFolder("default", "-l");
-                    else {
-                        if (process.argv[4] && process.argv[4] === "-l")
-                            settings_js_1.openProjectsFolder(process.argv[3], process.argv[4]);
-                        else
-                            settings_js_1.openProjectsFolder(process.argv[3], "");
+const fs_1 = require("fs");
+function main() {
+    if (process.argv.length > 2) {
+        const command = process.argv[2];
+        if (command.length > 0) {
+            const checkArgs = () => {
+                if (process.argv[3]) {
+                    let application = "default";
+                    const projectName = process.argv[3];
+                    if (process.argv[4]) {
+                        application = process.argv[4];
                     }
+                    return { projectName, application };
                 }
-                break;
-            case "--settings":
-                shelljs_1.default.exec(`${aipSets.osCommands.launch}, ${aipSets.settingsPath}`);
-                break;
-            case "--source":
-                shelljs_1.default.exec(`${aipSets.getFullSettings().editor} ${process.cwd()}`);
-                break;
-            case "gh":
-                console.log(aipSets.getFullSettings().ghUnauthorized);
-                break;
-            case "repos":
-                if (exports.env.token) {
-                    console.log("[GITHUB]".red);
-                    github_js_1.getRepos();
-                }
-                else {
-                    console.log("To use this functionnality you must have a GitHub token inside the .env file\n written like so: AIP_GH_TOKEN=YourToken"
-                        .bgRed);
-                }
-                break;
-            case "aip":
-                shelljs_1.default.exec(`${aipSets.osCommands.launch} https://github.com/Smoqu/AIP"`);
-                break;
-            case "--version":
-            case "-v":
-                console.log(aipSets.getFullSettings().version);
-                break;
-            // TODO: Upgrade
-            // TODO: Get settings
-            // TODO: Backup
-            default:
-                help_js_1.default();
-                break;
+            };
+            const { projectName, application } = Object.assign({}, checkArgs());
+            switch (command) {
+                case "create":
+                    createProject_js_1.default(projectName, application);
+                    break;
+                case "remove":
+                    removeProject_js_1.default(projectName, application);
+                    break;
+                case "open":
+                    if (process.argv.length > 3)
+                        openProject_js_1.default(projectName, application);
+                    else
+                        help_js_1.default();
+                    break;
+                case "pf":
+                    if (process.argv.length === 3)
+                        settings_js_1.openProjectsFolder("default", "");
+                    else if (process.argv[3]) {
+                        if (process.argv[3] === "-l")
+                            settings_js_1.openProjectsFolder("default", "-l");
+                        else {
+                            if (process.argv[4] && process.argv[4] === "-l")
+                                settings_js_1.openProjectsFolder(process.argv[3], process.argv[4]);
+                            else
+                                settings_js_1.openProjectsFolder(process.argv[3], "");
+                        }
+                    }
+                    break;
+                case "--settings":
+                    shelljs_1.default.exec(`${aipSets.osCommands.launch}, ${aipSets.settingsPath}`);
+                    break;
+                case "--source":
+                    shelljs_1.default.exec(`${aipSets.getFullSettings().editor} ${process.cwd()}`);
+                    break;
+                case "gh":
+                    console.log(aipSets.getFullSettings().ghUnauthorized);
+                    break;
+                case "repos":
+                    if (exports.env.token) {
+                        console.log("[GITHUB]".red);
+                        github_js_1.getRepos();
+                    }
+                    else {
+                        console.log("To use this functionnality you must have a GitHub token inside the .env file\n written like so: AIP_GH_TOKEN=YourToken"
+                            .bgRed);
+                    }
+                    break;
+                case "aip":
+                    shelljs_1.default.exec(`${aipSets.osCommands.launch} https://github.com/Smoqu/AIP"`);
+                    break;
+                case "--version":
+                case "-v":
+                    console.log(aipSets.getFullSettings().version);
+                    break;
+                // TODO: Upgrade
+                // TODO: Get settings
+                // TODO: Backup
+                default:
+                    help_js_1.default();
+                    break;
+            }
         }
     }
+    else
+        help_js_1.default();
 }
+if (fs_1.existsSync(aipSets.settingsPath) && fs_1.existsSync(aipSets.aipConfigPath))
+    main();
 else
-    help_js_1.default();
+    console.log("You need a settings.json file and aipConfig file".red);

@@ -6,7 +6,7 @@ import Settings, { Application } from "../interfaces/settings";
 const settings = "settings.json";
 export const settingsPath = path.join(process.cwd(), settings);
 const aipConfig = "aipconfig.json";
-const aipConfigPath = path.join(process.cwd(), aipConfig);
+export const aipConfigPath = path.join(process.cwd(), aipConfig);
 
 export const openSettings = () => shell.exec(settingsPath);
 

@@ -3,14 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.executeCommands = exports.getAppSettings = exports.getFullSettings = exports.openProjectsFolder = exports.osCommands = exports.openSettings = exports.settingsPath = void 0;
+exports.executeCommands = exports.getAppSettings = exports.getFullSettings = exports.openProjectsFolder = exports.osCommands = exports.openSettings = exports.aipConfigPath = exports.settingsPath = void 0;
 const shelljs_1 = __importDefault(require("shelljs"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const settings = "settings.json";
 exports.settingsPath = path_1.default.join(process.cwd(), settings);
 const aipConfig = "aipconfig.json";
-const aipConfigPath = path_1.default.join(process.cwd(), aipConfig);
+exports.aipConfigPath = path_1.default.join(process.cwd(), aipConfig);
 const openSettings = () => shelljs_1.default.exec(exports.settingsPath);
 exports.openSettings = openSettings;
 function fsOpenSettings() {
@@ -53,7 +53,7 @@ function getFullSettings() {
         editor: settingsData.editor,
         applications: settingsData.applications,
     };
-    const aipConfigData = JSON.parse(fs_1.default.readFileSync(aipConfigPath, "utf-8"));
+    const aipConfigData = JSON.parse(fs_1.default.readFileSync(exports.aipConfigPath, "utf-8"));
     const version = aipConfigData.version;
     return { projectPath, ghUnauthorized, editor, version, applications };
 }

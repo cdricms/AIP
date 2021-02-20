@@ -22,86 +22,93 @@ import createProject from "./commands/createProject.js";
 import removeProject from "./commands/removeProject.js";
 import { openProjectsFolder } from "./commands/settings.js";
 import { getRepos } from "./commands/github.js";
+import { existsSync } from "fs";
 
-if (process.argv.length > 2) {
-  const command = process.argv[2];
-  if (command.length > 0) {
-    const checkArgs = () => {
-      if (process.argv[3]) {
-        let application = "default";
-        const projectName = process.argv[3];
-        if (process.argv[4]) {
-          application = process.argv[4];
-        }
-        return { projectName, application };
-      }
-    };
-
-    const { projectName, application } = { ...checkArgs() };
-    switch (command) {
-      case "create":
-        createProject(projectName, application);
-        break;
-      case "remove":
-        removeProject(projectName, application);
-        break;
-      case "open":
-        if (process.argv.length > 3) openProject(projectName, application);
-        else getHelp();
-        break;
-      case "pf":
-        if (process.argv.length === 3) openProjectsFolder("default", "");
-        else if (process.argv[3]) {
-          if (process.argv[3] === "-l") openProjectsFolder("default", "-l");
-          else {
-            if (process.argv[4] && process.argv[4] === "-l")
-              openProjectsFolder(process.argv[3], process.argv[4]);
-            else openProjectsFolder(process.argv[3], "");
+function main() {
+  if (process.argv.length > 2) {
+    const command = process.argv[2];
+    if (command.length > 0) {
+      const checkArgs = () => {
+        if (process.argv[3]) {
+          let application = "default";
+          const projectName = process.argv[3];
+          if (process.argv[4]) {
+            application = process.argv[4];
           }
+          return { projectName, application };
         }
-        break;
+      };
 
-      case "--settings":
-        shell.exec(`${aipSets.osCommands.launch}, ${aipSets.settingsPath}`);
-        break;
+      const { projectName, application } = { ...checkArgs() };
+      switch (command) {
+        case "create":
+          createProject(projectName, application);
+          break;
+        case "remove":
+          removeProject(projectName, application);
+          break;
+        case "open":
+          if (process.argv.length > 3) openProject(projectName, application);
+          else getHelp();
+          break;
+        case "pf":
+          if (process.argv.length === 3) openProjectsFolder("default", "");
+          else if (process.argv[3]) {
+            if (process.argv[3] === "-l") openProjectsFolder("default", "-l");
+            else {
+              if (process.argv[4] && process.argv[4] === "-l")
+                openProjectsFolder(process.argv[3], process.argv[4]);
+              else openProjectsFolder(process.argv[3], "");
+            }
+          }
+          break;
 
-      case "--source":
-        shell.exec(`${aipSets.getFullSettings().editor} ${process.cwd()}`);
-        break;
+        case "--settings":
+          shell.exec(`${aipSets.osCommands.launch}, ${aipSets.settingsPath}`);
+          break;
 
-      case "gh":
-        console.log(aipSets.getFullSettings().ghUnauthorized);
-        break;
+        case "--source":
+          shell.exec(`${aipSets.getFullSettings().editor} ${process.cwd()}`);
+          break;
 
-      case "repos":
-        if (env.token) {
-          console.log("[GITHUB]".red);
-          getRepos();
-        } else {
-          console.log(
-            "To use this functionnality you must have a GitHub token inside the .env file\n written like so: AIP_GH_TOKEN=YourToken"
-              .bgRed
+        case "gh":
+          console.log(aipSets.getFullSettings().ghUnauthorized);
+          break;
+
+        case "repos":
+          if (env.token) {
+            console.log("[GITHUB]".red);
+            getRepos();
+          } else {
+            console.log(
+              "To use this functionnality you must have a GitHub token inside the .env file\n written like so: AIP_GH_TOKEN=YourToken"
+                .bgRed
+            );
+          }
+          break;
+        case "aip":
+          shell.exec(
+            `${aipSets.osCommands.launch} https://github.com/Smoqu/AIP"`
           );
-        }
-        break;
-      case "aip":
-        shell.exec(
-          `${aipSets.osCommands.launch} https://github.com/Smoqu/AIP"`
-        );
-        break;
+          break;
 
-      case "--version":
-      case "-v":
-        console.log(aipSets.getFullSettings().version);
-        break;
+        case "--version":
+        case "-v":
+          console.log(aipSets.getFullSettings().version);
+          break;
 
-      // TODO: Upgrade
-      // TODO: Get settings
-      // TODO: Backup
+        // TODO: Upgrade
+        // TODO: Get settings
+        // TODO: Backup
 
-      default:
-        getHelp();
-        break;
+        default:
+          getHelp();
+          break;
+      }
     }
-  }
-} else getHelp();
+  } else getHelp();
+}
+
+if (existsSync(aipSets.settingsPath) && existsSync(aipSets.aipConfigPath))
+  main();
+else console.log("You need a settings.json file and aipConfig file".red);
