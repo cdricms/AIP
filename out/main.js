@@ -61,10 +61,16 @@ function main() {
             const { projectName, application } = Object.assign({}, checkArgs());
             switch (command) {
                 case "create":
-                    createProject_js_1.default(projectName, application);
+                    if (process.argv.length > 3)
+                        createProject_js_1.default(projectName, application);
+                    else
+                        help_js_1.default();
                     break;
                 case "remove":
-                    removeProject_js_1.default(projectName, application);
+                    if (process.argv.length > 3)
+                        removeProject_js_1.default(projectName, application);
+                    else
+                        help_js_1.default();
                     break;
                 case "open":
                     if (process.argv.length > 3)

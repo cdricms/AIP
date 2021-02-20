@@ -42,10 +42,12 @@ function main() {
       const { projectName, application } = { ...checkArgs() };
       switch (command) {
         case "create":
-          createProject(projectName, application);
+          if (process.argv.length > 3) createProject(projectName, application);
+          else getHelp();
           break;
         case "remove":
-          removeProject(projectName, application);
+          if (process.argv.length > 3) removeProject(projectName, application);
+          else getHelp();
           break;
         case "open":
           if (process.argv.length > 3) openProject(projectName, application);
