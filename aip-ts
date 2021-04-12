@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 
 "$basedir/aip-ts.bat" "$@"

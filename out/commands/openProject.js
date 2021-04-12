@@ -4,7 +4,7 @@ const fs_1 = require("fs");
 const path_1 = require("path");
 const shelljs_1 = require("shelljs");
 const settings_1 = require("./settings");
-function openProject(projectName, application) {
+function openProject(projectName, application = "default") {
     let { projectPath, editor } = Object.assign({}, settings_1.getFullSettings());
     projectPath = path_1.join(projectPath);
     let _dir;

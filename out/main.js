@@ -28,7 +28,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({ path: path_1.join(process.cwd(), ".env") });
 exports.env = {
     token: "",
-    gist: "",
+    gist: ""
 };
 if (process.env.AIP_GH_TOKEN)
     exports.env.token = process.env.AIP_GH_TOKEN;

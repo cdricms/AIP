@@ -7,7 +7,7 @@ export let env: {
   gist: string;
 } = {
   token: "",
-  gist: "",
+  gist: ""
 };
 
 if (process.env.AIP_GH_TOKEN) env.token = process.env.AIP_GH_TOKEN;
@@ -42,15 +42,15 @@ function main() {
       const { projectName, application } = { ...checkArgs() };
       switch (command) {
         case "create":
-          if (process.argv.length > 3) createProject(projectName, application);
+          if (process.argv.length > 3) createProject(projectName!, application);
           else getHelp();
           break;
         case "remove":
-          if (process.argv.length > 3) removeProject(projectName, application);
+          if (process.argv.length > 3) removeProject(projectName!, application);
           else getHelp();
           break;
         case "open":
-          if (process.argv.length > 3) openProject(projectName, application);
+          if (process.argv.length > 3) openProject(projectName!, application);
           else getHelp();
           break;
         case "pf":

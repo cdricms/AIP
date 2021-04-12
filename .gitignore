@@ -8,3 +8,4 @@ main-macos
 main-win.exe
 
 node_modules
+.yarn 

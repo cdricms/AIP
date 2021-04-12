@@ -3,7 +3,10 @@ import { join } from "path";
 import { exec } from "shelljs";
 import { getAppSettings, getFullSettings } from "./settings";
 
-export default function openProject(projectName: string, application: string) {
+export default function openProject(
+  projectName: string,
+  application: string = "default"
+) {
   let { projectPath, editor } = { ...getFullSettings() };
   projectPath = join(projectPath);
   let _dir: string;
